@@ -1,0 +1,33 @@
+$text-stroke: 0 0 2px black;
+
+.pokemon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  span {
+    margin: 12px;
+
+    color: #fff;
+    text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
+  }
+
+  .number {
+    font-weight: 600;
+    font-size: 0.8em;
+  }
+
+  .name {
+    font-weight: 600;
+    font-size: 1em;
+  }
+
+  img {
+    height: 50%;
+    width: auto;
+  }
+}

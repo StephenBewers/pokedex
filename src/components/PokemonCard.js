@@ -1,7 +1,5 @@
 import { React } from "react";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import Image from "react-bootstrap/Image";
+import './PokemonCard.scss';
 
 const PokemonCard = ({ number, name, type, image }) => {
   let typeImage = "";
@@ -23,16 +21,11 @@ const PokemonCard = ({ number, name, type, image }) => {
       break;
   }
   return (
-    <Col>
-      <Card className="pokemon-card">
-        <Card.Img src={`${typeImage}`} alt={`${type} background`} />
-        <Card.ImgOverlay>
-          <Card.Text>{number}</Card.Text>
-          <Image src={`${image}`} alt={`${name}`} fluid />
-          <Card.Title>{name}</Card.Title>
-        </Card.ImgOverlay>
-      </Card>
-    </Col>
+    <div className="pokemon-card" style={{ backgroundImage: `url(${typeImage})` }}>
+      <span className="number">{number}</span>
+      <img src={`${image}`} alt={`${name}`} />
+      <span className="name">{name}</span>
+    </div>
   );
 };
 
