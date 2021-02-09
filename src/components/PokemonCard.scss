@@ -1,6 +1,17 @@
 $text-stroke: 0 0 2px black;
 
+@mixin text-style {
+  margin: 10%;
+
+  font-weight: 600;
+  color: #fff;
+  text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
+}
+
 .pokemon-card {
+  height: 100%;
+  width: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,25 +20,22 @@ $text-stroke: 0 0 2px black;
   border-radius: 8px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
-  span {
-    margin: 12px;
+  transform-style: preserve-3d;
 
-    color: #fff;
-    text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
+  .pokemon-img {
+    width: 60%;
+    height: auto;
+
+    transform: translateZ(20px);
   }
 
-  .number {
-    font-weight: 600;
-    font-size: 0.8em;
+  .pokemon-number {
+    @include text-style;
+    font-size: 0.9em;
   }
 
-  .name {
-    font-weight: 600;
-    font-size: 1em;
-  }
-
-  img {
-    height: 50%;
-    width: auto;
+  .pokemon-name {
+    @include text-style;
+    font-size: 1.1em;
   }
 }

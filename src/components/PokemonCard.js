@@ -1,5 +1,6 @@
 import { React } from "react";
-import './PokemonCard.scss';
+import Tilt from "react-parallax-tilt";
+import "./PokemonCard.scss";
 
 const PokemonCard = ({ number, name, type, image }) => {
   let typeImage = "";
@@ -21,11 +22,18 @@ const PokemonCard = ({ number, name, type, image }) => {
       break;
   }
   return (
-    <div className="pokemon-card" style={{ backgroundImage: `url(${typeImage})` }}>
-      <span className="number">{number}</span>
-      <img src={`${image}`} alt={`${name}`} />
-      <span className="name">{name}</span>
-    </div>
+    <Tilt
+      className="pokemon-card"
+      perspective={500}
+      glareEnable={true}
+      glareMaxOpacity={0.45}
+      scale={1.02}
+      style={{ backgroundImage: `url(${typeImage})` }}
+    >
+      <span className="pokemon-number">{number}</span>
+      <img className="pokemon-img" src={`${image}`} alt={`${name}`} />
+      <span className="pokemon-name">{name}</span>
+    </Tilt>
   );
 };
 

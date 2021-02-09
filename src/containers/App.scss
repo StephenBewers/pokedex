@@ -1,7 +1,14 @@
 .container {
   display: grid;
-  gap: 30px;
-  padding: 30px;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: 182px;
+  padding: 5vmin;
+  gap: 5vmin;
+  justify-content: center;
+  @media (orientation: landscape) {
+    grid-template-columns: repeat(auto-fit, minmax(100px, calc(33vmin / 1.4)));
+    grid-auto-rows: minmax(140px, 33vmin);
+  }
+  @media (orientation: portrait) {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 33vmin));
+    grid-auto-rows: minmax(140px, calc(33vmin * 1.4));
+  }
 }
