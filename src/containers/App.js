@@ -1,36 +1,39 @@
 import React, { Component } from "react";
 import "./App.scss";
-import PokemonCard from "../components/PokemonCard.js";
+import PokemonCardList from "../components/PokemonCardList.js";
 
+const Pokedex = require("pokeapi-js-wrapper");
+const customOptions = {
+  cacheImages: true,
+};
+const PokeApi = new Pokedex.Pokedex(customOptions);
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      pokemons: [],
+    };
+  }
+
+  componentDidMount() {
+    try {
+      (async () => {
+        const interval = { limit: 151 };
+        let response = await PokeApi.getPokemonsList(interval);
+        let pokemonObjects = [];
+        for (const item of response.results) {
+          let pokemonObject = await PokeApi.resource(`${item.url}`);
+          pokemonObjects.push(pokemonObject);
+        }
+        this.setState({ pokemons: pokemonObjects });
+      })();
+    } catch {
+      console.error(`Failed to get Pokemon list`);
+    }
+  }
+
   render() {
-    return (
-      <>
-        <div className="container">
-          <PokemonCard
-            id="1"
-            number="001"
-            name="Bulbasaur"
-            type="grass"
-            image="https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png"
-          />
-          <PokemonCard
-            id="2"
-            number="004"
-            name="Charmander"
-            type="fire"
-            image="https://cdn.bulbagarden.net/upload/7/73/004Charmander.png"
-          />
-          <PokemonCard
-            id="3"
-            number="007"
-            name="Squirtle"
-            type="water"
-            image="https://cdn.bulbagarden.net/upload/3/39/007Squirtle.png"
-          />
-        </div>
-      </>
-    );
+    return <PokemonCardList pokemons={this.state.pokemons} />;
   }
 }
 

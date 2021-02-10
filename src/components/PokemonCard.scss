@@ -32,10 +32,12 @@ $text-stroke: 0 0 2px black;
   .pokemon-number {
     @include text-style;
     font-size: 0.9em;
+    content: counter(my-counter, decimal-leading-zero);
   }
 
   .pokemon-name {
     @include text-style;
     font-size: 1.1em;
+    text-transform: capitalize;
   }
 }
