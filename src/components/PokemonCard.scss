@@ -1,0 +1,41 @@
+$text-stroke: 0 0 2px black;
+
+@mixin text-style {
+  margin: 10%;
+
+  font-weight: 600;
+  color: #fff;
+  text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
+}
+
+.pokemon-card {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  transform-style: preserve-3d;
+
+  .pokemon-img {
+    width: 60%;
+    height: auto;
+
+    transform: translateZ(20px);
+  }
+
+  .pokemon-number {
+    @include text-style;
+    font-size: 0.9em;
+  }
+
+  .pokemon-name {
+    @include text-style;
+    font-size: 1.1em;
+  }
+}
