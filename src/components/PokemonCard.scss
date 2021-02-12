@@ -23,7 +23,7 @@ $text-stroke: 0 0 2px black;
   transform-style: preserve-3d;
 
   .pokemon-img {
-    width: 60%;
+    width: 66%;
     height: auto;
 
     transform: translateZ(20px);
@@ -32,7 +32,6 @@ $text-stroke: 0 0 2px black;
   .pokemon-number {
     @include text-style;
     font-size: 0.9em;
-    content: counter(my-counter, decimal-leading-zero);
   }
 
   .pokemon-name {
