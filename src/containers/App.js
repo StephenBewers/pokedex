@@ -46,6 +46,7 @@ class App extends Component {
 
   render() {
     return (
+      <>
       <InfiniteScroll
         dataLength={this.state.pokemons.length}
         next={this.getPokemon}
@@ -53,6 +54,7 @@ class App extends Component {
       >
         <PokemonCardList pokemons={this.state.pokemons} />
       </InfiniteScroll>
+      </>
     );
   }
 }

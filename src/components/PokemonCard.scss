@@ -1,9 +1,17 @@
+@font-face {
+  font-family: "Pokemon Solid";
+  font-style: normal;
+  font-weight: normal;
+  src: local("../Pokemon\ Solid.ttf"), url("../Pokemon\ Solid.ttf") format("truetype");
+  }
+
 $text-stroke: 0 0 2px black;
 
 @mixin text-style {
-  margin: 10%;
+  margin: 5%;
 
-  font-weight: 600;
+  font-family: "Pokemon Solid";
+  letter-spacing: 2px;
   color: #fff;
   text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
 }
@@ -31,12 +39,12 @@ $text-stroke: 0 0 2px black;
 
   .pokemon-number {
     @include text-style;
-    font-size: 0.9em;
+    font-size: calc(12px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
   }
 
   .pokemon-name {
     @include text-style;
-    font-size: 1.1em;
+    font-size: calc(12px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
     text-transform: capitalize;
   }
 }
