@@ -1,13 +1,7 @@
-@font-face {
-  font-family: "Pokemon Hollow";
-  font-style: normal;
-  font-weight: normal;
-  src: local("../Pokemon\ Hollow.ttf"), url("../Pokemon\ Hollow.ttf") format("truetype");
-  }
-
 .container {
   display: grid;
   padding: 5vmin;
+  padding-top: 10vh;
   gap: 5vmin;
   justify-content: center;
 
@@ -25,4 +19,9 @@
     grid-template-columns: repeat(auto-fill, minmax(140px, 33vmin));
     grid-auto-rows: minmax(196px, calc(33vmin * 1.4));
   }
+
+  &.padded {
+    padding-top: 80vh;
+   }
+
 }

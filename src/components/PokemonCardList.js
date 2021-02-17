@@ -1,9 +1,12 @@
 import React from "react";
 import PokemonCard from "./PokemonCard";
 
-const PokemonCardList = ({ pokemons }) => {
+const PokemonCardList = ({ pokemons, stickyHeader }) => {
+
+  let className = (stickyHeader) ? "container padded" : "container";
+
   return (
-    <div className="container">
+    <div className={className}>
       {pokemons.map((pokemon, i) => {
         return (
           <PokemonCard
