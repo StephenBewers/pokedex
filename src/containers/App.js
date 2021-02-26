@@ -13,7 +13,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      pokemons: [],
+      retrievedPokemon: [],
       count: 1,
       hasMore: true,
       stickySearch: false,
@@ -23,7 +23,7 @@ class App extends Component {
   // Retrieves the pokemon objects from the API
   getPokemon = () => {
     // Compares the number of pokemon already in state to the total available from the API
-    if (this.state.pokemons.length >= this.state.count) {
+    if (this.state.retrievedPokemon.length >= this.state.count) {
       // If there are no more to retrieve, set the hasMore flag to false
       this.setState({ hasMore: false });
       return;
@@ -31,7 +31,7 @@ class App extends Component {
     try {
       (async () => {
         // The starting point and number of pokemon to retrieve from the API per request
-        const interval = { offset: this.state.pokemons.length, limit: 30 };
+        const interval = { offset: this.state.retrievedPokemon.length, limit: 30 };
 
         // Gets the list of pokemon requested and the API URL for their information
         let response = await PokeApi.getPokemonsList(interval);
@@ -47,7 +47,7 @@ class App extends Component {
         }
 
         // Add the array of pokemon objects retrieved in this request to the pokemon objects already in state
-        this.setState({ pokemons: this.state.pokemons.concat(pokemonObjects) });
+        this.setState({ retrievedPokemon: this.state.retrievedPokemon.concat(pokemonObjects) });
       })();
     } catch {
       console.error(`Failed to get Pokemon list`);
@@ -93,11 +93,11 @@ class App extends Component {
         <Header key={this.state.stickySearch} stickySearch={this.state.stickySearch}></Header>
         <main>
           <InfiniteScroll
-            dataLength={this.state.pokemons.length}
+            dataLength={this.state.retrievedPokemon.length}
             next={this.getPokemon}
             hasMore={this.state.hasMore}
           >
-            <PokemonCardList pokemons={this.state.pokemons} />
+            <PokemonCardList pokemonList={this.state.retrievedPokemon} />
           </InfiniteScroll>
         </main>
       </>

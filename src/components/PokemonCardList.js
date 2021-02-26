@@ -2,11 +2,11 @@ import React from "react";
 import "./PokemonCardList.scss";
 import PokemonCard from "./PokemonCard";
 
-const PokemonCardList = ({ pokemons }) => {
+const PokemonCardList = ({ pokemonList }) => {
 
   return (
     <div className="card-list">
-      {pokemons.map((pokemon, i) => {
+      {pokemonList.map((pokemon, i) => {
         return (
           <PokemonCard
             key={pokemon.id}
