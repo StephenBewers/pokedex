@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./Header.scss";
-import "animate.css";
 import SearchBar from "../components/SearchBar.js";
 
 class Header extends Component {
