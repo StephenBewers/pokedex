@@ -1,12 +1,11 @@
 import React from "react";
+import "./PokemonCardList.scss";
 import PokemonCard from "./PokemonCard";
 
-const PokemonCardList = ({ pokemons, stickyHeader }) => {
-
-  let className = (stickyHeader) ? "container padded" : "container";
+const PokemonCardList = ({ pokemons }) => {
 
   return (
-    <div className={className}>
+    <div className="card-list">
       {pokemons.map((pokemon, i) => {
         return (
           <PokemonCard

@@ -1,4 +1,12 @@
 @font-face {
+  font-family: "Pokemon Solid";
+  font-style: normal;
+  font-weight: normal;
+  src: local("../Pokemon\ Solid.ttf"),
+    url("../Pokemon\ Solid.ttf") format("truetype");
+}
+
+@font-face {
   font-family: "Pokemon Hollow";
   font-style: normal;
   font-weight: normal;
@@ -6,34 +14,43 @@
     url("../Pokemon\ Hollow.ttf") format("truetype");
 }
 
+$text-stroke: 0 0 3px black;
+
 header {
   width: 100%;
-  height: 70vh;
+  height: 70vmin;
+  top: 0;
 
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  overflow: hidden;
 
-  background-color: #aaaaaa;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
-  &.sticky {
-    height: 10vh;
-    position: fixed;
-    top: 0;
-    z-index: 100;
-  }
+  background-color: transparent;
 }
 
 h1 {
-  font-family: "Pokemon Hollow";
+  font-family: "Pokemon Solid";
   font-size: 8em;
   line-height: 1.8em;
-  margin: 0 0 0.4em 0;
-  letter-spacing: 2px;
+  letter-spacing: 0.06em;
   text-align: center;
+  text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
+  color: #fff;
 
   display: inline-block;
+  margin-top: -6vh;
+
+  @media (max-width: 1200px) {
+    font-size: 6em;
+    line-height: 1.35em;
+    letter-spacing: 0.045em;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 4em;
+    line-height: 0.9em;
+    letter-spacing: 0.03em;
+  }
+
 }

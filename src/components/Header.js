@@ -1,14 +1,45 @@
-import React from "react";
+import React, { Component } from "react";
 import "./Header.scss";
-import SearchBox from "../components/SearchBox.js";
+import "animate.css";
+import SearchBar from "../components/SearchBar.js";
 
-const Header = ({stickyHeader}) => {
+class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sticky: this.props.stickySearch,
+      stickyClass: "default",
+      animateClass: "",
+    };
+  }
 
-    let className = (stickyHeader) ? "sticky" : "";
+  componentDidMount() {
+    // If the state has become sticky, change the search bar class to sticky
+    if (this.state.sticky && this.state.stickyClass === "default") {
+      this.setState({
+        stickyClass: "sticky",
+      });
+    }
+    // If the state has become non-sticky, return the search bar class to default
+    else if (!this.state.sticky && this.state.stickyClass === "sticky") {
+      this.setState({
+        stickyClass: "default",
+      });
+    }
+  }
 
+  render() {
     return (
-      <header className={className}></header>
+      <header>
+        <h1>
+          Pokédex
+        </h1>
+        <SearchBar
+          additionalClass={this.state.stickyClass}
+        ></SearchBar>
+      </header>
     );
   }
+}
 
 export default Header;

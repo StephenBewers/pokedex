@@ -16,7 +16,7 @@ class App extends Component {
       pokemons: [],
       count: 1,
       hasMore: true,
-      stickyHeader: false,
+      stickySearch: false,
     };
   }
 
@@ -58,31 +58,46 @@ class App extends Component {
     // Retrieve the pokemon
     this.getPokemon();
 
-    // Listen for scrolling
-    window.addEventListener("scroll", () => {
+    // Get the viewport height and width, and calculate the minimum
+    const viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    const viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    const viewportMin = Math.min(viewportHeight, viewportWidth);
 
-      // Get the viewport height and use it to calculate the point we want the header to stick
-      const viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-      let stickyPosition = Math.min(viewportHeight * 0.6);
-      if (window.pageYOffset >= stickyPosition) {
-        this.setState({ stickyHeader: true });
+    // Calculate the point for the search bar to stick
+    let stickySearchPosition = Math.min(viewportMin* 0.4);
+
+    // Checks if the user has scrolled past the sticky position 
+    const checkStickyPosition = () => {
+
+      // If we pass the sticky position, make the search bar stick
+      if (window.scrollY >= stickySearchPosition) {
+        if (!this.state.stickySearch) { this.setState({ stickySearch: true }) };
       } else {
-        this.setState({ stickyHeader: false });
+        if (this.state.stickySearch) { this.setState({ stickySearch: false }) };
       }
+    }
+
+    // Listen for scrolling and/or mouse wheeling
+    window.addEventListener("scroll", checkStickyPosition, {
+      passive: true
     });
+    window.addEventListener("wheel", checkStickyPosition, {
+      passive: true
+    });
+
   }
 
   render() {
     return (
       <>
-        <Header stickyHeader={this.state.stickyHeader}></Header>
+        <Header key={this.state.stickySearch} stickySearch={this.state.stickySearch}></Header>
         <main>
           <InfiniteScroll
             dataLength={this.state.pokemons.length}
             next={this.getPokemon}
             hasMore={this.state.hasMore}
           >
-            <PokemonCardList pokemons={this.state.pokemons} stickyHeader={this.state.stickyHeader} />
+            <PokemonCardList pokemons={this.state.pokemons} />
           </InfiniteScroll>
         </main>
       </>
