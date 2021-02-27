@@ -6,25 +6,11 @@
     url("../Pokemon\ Solid.ttf") format("truetype");
 }
 
-.search-bar {
+.search-container {
   width: 300px;
   min-width: 50%;
   margin-top: 3vh;
-  padding: 0.25em 1em 0.25em 1em;
   z-index: 100;
-
-  border-radius: 16px;
-  border-color: transparent;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
-  font-family: "Pokemon Solid";
-  letter-spacing: 0.1em;
-  font-size: 1em;
-
-  &:focus {
-    box-shadow: 0 0 5px 4px cornflowerblue;
-    outline: 0;
-  }
 
   &.sticky {
     position: fixed;
@@ -33,9 +19,57 @@
     left: 0;
     right: 0;
   }
+}
+
+.search-bar {
+  display:flex;
+  flex-direction:row;
+
+  background-color: #fff;
+  border-radius: 16px;
+  border-color: transparent;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  overflow: hidden;
+
+  &:focus-within {
+    box-shadow: 0 0 5px 4px cornflowerblue;
+    outline: 0;
+  }
+
+}
+
+.search-box {
+  width: 100%;
+  padding: 0.25em 1em 0.25em 1em;
+
+  flex-grow:2;
+  
+  font-family: "Pokemon Solid";
+  letter-spacing: 0.1em;
+  font-size: 1em;
+
+  border: none;
 
   @media (max-width: 480px) {
     font-size: 0.8em;
     letter-spacing: 0.08em;
   }
+}
+
+.search-btn {
+  background: none;
+  border: none;
+  padding: 0.25em 1em 0.25em 1em;
+  margin-right: 1em;
+}
+
+// TODO: Style the autocomplete options
+
+.options {
+  position:fixed;
+}
+
+.no-results {
+  position:fixed;
 }

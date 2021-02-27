@@ -13,6 +13,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      pokemonNames: [],
       retrievedPokemon: [],
       count: 1,
       hasMore: true,
@@ -20,10 +21,34 @@ class App extends Component {
     };
   }
 
+  // Gets a list of all available pokemon names
+  getPokemonNames = () => {
+    // The starting point and number of pokemon to retrieve from the API per request
+    const interval = { offset: 0, limit: 2000 };
+
+    try {
+      (async () => {
+        // Gets the list of pokemon requested
+        let response = await PokeApi.getPokemonSpeciesList(interval);
+
+        // Store all of the pokemon names in an array and add to state
+        let pokemonNames = [];
+        for (const item of response.results) {
+          pokemonNames.push(item.name);
+        }
+        this.setState({ pokemonNames: pokemonNames });
+      })();
+    } catch {
+      console.error(`Failed to get Pokemon names`);
+    }
+  };
+
   // Retrieves the pokemon objects from the API
   getPokemon = () => {
+    let { retrievedPokemon } = this.state;
+
     // Compares the number of pokemon already in state to the total available from the API
-    if (this.state.retrievedPokemon.length >= this.state.count) {
+    if (retrievedPokemon.length >= this.state.count) {
       // If there are no more to retrieve, set the hasMore flag to false
       this.setState({ hasMore: false });
       return;
@@ -31,7 +56,7 @@ class App extends Component {
     try {
       (async () => {
         // The starting point and number of pokemon to retrieve from the API per request
-        const interval = { offset: this.state.retrievedPokemon.length, limit: 30 };
+        const interval = { offset: retrievedPokemon.length, limit: 30 };
 
         // Gets the list of pokemon requested and the API URL for their information
         let response = await PokeApi.getPokemonsList(interval);
@@ -47,7 +72,9 @@ class App extends Component {
         }
 
         // Add the array of pokemon objects retrieved in this request to the pokemon objects already in state
-        this.setState({ retrievedPokemon: this.state.retrievedPokemon.concat(pokemonObjects) });
+        this.setState({
+          retrievedPokemon: retrievedPokemon.concat(pokemonObjects),
+        });
       })();
     } catch {
       console.error(`Failed to get Pokemon list`);
@@ -55,49 +82,65 @@ class App extends Component {
   };
 
   componentDidMount() {
+    // If the pokemon names list is empty, get the pokemon names
+    if (!this.state.pokemonNames.length) { this.getPokemonNames(); };
+    
     // Retrieve the pokemon
     this.getPokemon();
 
     // Get the viewport height and width, and calculate the minimum
-    const viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-    const viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    const viewportHeight = Math.max(
+      document.documentElement.clientHeight || 0,
+      window.innerHeight || 0
+    );
+    const viewportWidth = Math.max(
+      document.documentElement.clientWidth || 0,
+      window.innerWidth || 0
+    );
     const viewportMin = Math.min(viewportHeight, viewportWidth);
 
     // Calculate the point for the search bar to stick
-    let stickySearchPosition = Math.min(viewportMin* 0.4);
+    let stickySearchPosition = Math.min(viewportMin * 0.4);
 
-    // Checks if the user has scrolled past the sticky position 
+    // Checks if the user has scrolled past the sticky position
     const checkStickyPosition = () => {
-
       // If we pass the sticky position, make the search bar stick
       if (window.scrollY >= stickySearchPosition) {
-        if (!this.state.stickySearch) { this.setState({ stickySearch: true }) };
+        if (!this.state.stickySearch) {
+          this.setState({ stickySearch: true });
+        }
       } else {
-        if (this.state.stickySearch) { this.setState({ stickySearch: false }) };
+        if (this.state.stickySearch) {
+          this.setState({ stickySearch: false });
+        }
       }
-    }
+    };
 
     // Listen for scrolling and/or mouse wheeling
     window.addEventListener("scroll", checkStickyPosition, {
-      passive: true
+      passive: true,
     });
     window.addEventListener("wheel", checkStickyPosition, {
-      passive: true
+      passive: true,
     });
-
   }
 
   render() {
+    const { pokemonNames, retrievedPokemon, hasMore, stickySearch } = this.state;
     return (
       <>
-        <Header key={this.state.stickySearch} stickySearch={this.state.stickySearch}></Header>
+        <Header
+          key={stickySearch}
+          stickySearch={stickySearch}
+          searchOptions={pokemonNames}
+        ></Header>
         <main>
           <InfiniteScroll
-            dataLength={this.state.retrievedPokemon.length}
+            dataLength={retrievedPokemon.length}
             next={this.getPokemon}
-            hasMore={this.state.hasMore}
+            hasMore={hasMore}
           >
-            <PokemonCardList pokemonList={this.state.retrievedPokemon} />
+            <PokemonCardList pokemonList={retrievedPokemon} />
           </InfiniteScroll>
         </main>
       </>

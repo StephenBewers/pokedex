@@ -34,7 +34,7 @@ class Header extends Component {
           Pokédex
         </h1>
         <SearchBar
-          additionalClass={this.state.stickyClass}
+          additionalClass={this.state.stickyClass} options={this.props.searchOptions}
         ></SearchBar>
       </header>
     );
