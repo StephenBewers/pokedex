@@ -80,7 +80,7 @@
 }
 
 .options-container {
-  position: fixed;
+  position: absolute;
   
   @include search-bar-dimensions;
   @include search-bar-style;

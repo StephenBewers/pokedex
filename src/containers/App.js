@@ -12,9 +12,12 @@ const PokeApi = new Pokedex.Pokedex(customOptions);
 class App extends Component {
   constructor() {
     super();
+    this.getPokemon = this.getPokemon.bind(this);
+    this.getSpecificPokemon = this.getSpecificPokemon.bind(this);
     this.state = {
       pokemonNames: [],
       retrievedPokemon: [],
+      retrievalLimit: 24,
       count: 1,
       hasMore: true,
       stickySearch: false,
@@ -50,6 +53,14 @@ class App extends Component {
   getPokemon = () => {
     let { retrievedPokemon } = this.state;
 
+    // Number of pokemon to retrieve from the API per call
+    const { retrievalLimit } = this.state;
+
+    // If there are fewer pokemon in state than would be returned by one call, reset the state
+    if (retrievedPokemon.length < retrievalLimit) {
+      this.setState({ retrievedPokemon: [] });
+    }
+
     // Compares the number of pokemon already in state to the total available from the API
     if (retrievedPokemon.length >= this.state.count) {
       // If there are no more to retrieve, set the hasMore flag to false
@@ -59,7 +70,10 @@ class App extends Component {
     try {
       (async () => {
         // The starting point and number of pokemon to retrieve from the API per request
-        const interval = { offset: retrievedPokemon.length, limit: 24 };
+        const interval = {
+          offset: retrievedPokemon.length,
+          limit: retrievalLimit,
+        };
 
         // Gets the list of pokemon requested and the API URL for their information
         let response = await PokeApi.getPokemonSpeciesList(interval);
@@ -67,10 +81,13 @@ class App extends Component {
         // For each pokemon in the response, retrieve their information from the API
         let pokemonObjects = [];
         for (const item of response.results) {
+          // Get the pokemon species from the API
           let pokemonSpecies = await PokeApi.resource(`${item.url}`);
 
-          // Get the data for each variant of the species and store it in the object
-          pokemonSpecies.defaultVariant = await PokeApi.resource(`${pokemonSpecies.varieties[0].pokemon.url}`);
+          // Get the data for the default variant of the species and store it in the object
+          pokemonSpecies.defaultVariant = await PokeApi.resource(
+            `${pokemonSpecies.varieties[0].pokemon.url}`
+          );
 
           // Add the pokemon object to the array of pokemon objects retrieved in this request
           pokemonObjects.push(pokemonSpecies);
@@ -86,10 +103,42 @@ class App extends Component {
     }
   };
 
+  // Retrieves a single pokemon from the API
+  getSpecificPokemon(pokemonToGet) {
+    try {
+      (async () => {
+        let pokemonObjects = [];
+
+        for (const pokemon of pokemonToGet) {
+          // Get the pokemon species from the API
+          let pokemonSpecies = await PokeApi.getPokemonSpeciesByName(pokemon);
+
+          // Get the data for the default variant of the species and store it in the object
+          pokemonSpecies.defaultVariant = await PokeApi.resource(
+            `${pokemonSpecies.varieties[0].pokemon.url}`
+          );
+
+          // Add the pokemon object to the array of pokemon objects retrieved in this request
+          pokemonObjects.push(pokemonSpecies);
+        }
+
+        // Change state to the pokemon objects retrieved
+        this.setState({
+          retrievedPokemon: pokemonObjects,
+          hasMore: false,
+        });
+      })();
+    } catch {
+      console.error(`Unable to retrieve specified pokemon`);
+    }
+  }
+
   componentDidMount() {
     // If the pokemon names list is empty, get the pokemon names
-    if (!this.state.pokemonNames.length) { this.getPokemonNames(); };
-    
+    if (!this.state.pokemonNames.length) {
+      this.getPokemonNames();
+    }
+
     // Retrieve the pokemon
     this.getPokemon();
 
@@ -131,20 +180,36 @@ class App extends Component {
   }
 
   render() {
-    const { pokemonNames, retrievedPokemon, hasMore, stickySearch } = this.state;
+    const {
+      pokemonNames,
+      retrievedPokemon,
+      hasMore,
+      stickySearch,
+    } = this.state;
     return (
       <>
         <Header
           key={stickySearch}
           stickySearch={stickySearch}
           searchOptions={pokemonNames}
+          getPokemon={this.getPokemon}
+          getSpecificPokemon={this.getSpecificPokemon}
         ></Header>
         <main>
           <InfiniteScroll
             dataLength={retrievedPokemon.length}
             next={this.getPokemon}
             hasMore={hasMore}
-            loader={<div className="loading-bar"><div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>}
+            loader={
+              <div className="loading-bar">
+                <div className="lds-ellipsis">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+            }
           >
             <PokemonCardList pokemonList={retrievedPokemon} />
           </InfiniteScroll>

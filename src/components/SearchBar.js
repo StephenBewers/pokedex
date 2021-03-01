@@ -8,6 +8,8 @@ class SearchBar extends Component {
   static propTypes = {
     options: PropTypes.instanceOf(Array).isRequired,
     additionalClass: PropTypes.string,
+    getPokemon: PropTypes.func,
+    getSpecificPokemon: PropTypes.func
   };
 
   state = {
@@ -52,6 +54,7 @@ class SearchBar extends Component {
       showOptions: false,
       userInput: event.currentTarget.innerText,
     });
+    this.props.getSpecificPokemon([event.currentTarget.innerText.toLowerCase()]);
   };
 
   // Handle key events for autocomplete suggestion list
@@ -65,6 +68,7 @@ class SearchBar extends Component {
         showOptions: false,
         userInput: filteredOptions[activeOption],
       });
+      this.props.getSpecificPokemon([filteredOptions[activeOption].toLowerCase()]);
     }
 
     // Up arrow selects the suggestion above the currently selected option if not already at the top
