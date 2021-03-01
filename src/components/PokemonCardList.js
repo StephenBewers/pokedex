@@ -10,10 +10,10 @@ const PokemonCardList = ({ pokemonList }) => {
         return (
           <PokemonCard
             key={pokemon.id}
-            number={pokemon.id}
+            number={pokemon.pokedex_numbers[0].entry_number}
             name={pokemon.name}
-            type={pokemon.types[0].type.name}
-            image={pokemon.sprites.other["official-artwork"].front_default}
+            type={pokemon.defaultVariant.types[0].type.name}
+            image={pokemon.defaultVariant.sprites.other["official-artwork"].front_default}
           />
         );
       })}

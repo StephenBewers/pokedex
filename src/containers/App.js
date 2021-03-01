@@ -31,6 +31,9 @@ class App extends Component {
         // Gets the list of pokemon requested
         let response = await PokeApi.getPokemonSpeciesList(interval);
 
+        // Store the total number of pokemon available from the API in state
+        this.setState({ count: response.count });
+
         // Store all of the pokemon names in an array and add to state
         let pokemonNames = [];
         for (const item of response.results) {
@@ -56,19 +59,21 @@ class App extends Component {
     try {
       (async () => {
         // The starting point and number of pokemon to retrieve from the API per request
-        const interval = { offset: retrievedPokemon.length, limit: 30 };
+        const interval = { offset: retrievedPokemon.length, limit: 24 };
 
         // Gets the list of pokemon requested and the API URL for their information
-        let response = await PokeApi.getPokemonsList(interval);
+        let response = await PokeApi.getPokemonSpeciesList(interval);
 
-        // Retrieves the total number of pokemon available from the API
-        this.setState({ count: response.count });
-
-        // For each pokemon in the response, retrieve their information from the API and store it in an array of pokemon objects
+        // For each pokemon in the response, retrieve their information from the API
         let pokemonObjects = [];
         for (const item of response.results) {
-          let pokemonObject = await PokeApi.resource(`${item.url}`);
-          pokemonObjects.push(pokemonObject);
+          let pokemonSpecies = await PokeApi.resource(`${item.url}`);
+
+          // Get the data for each variant of the species and store it in the object
+          pokemonSpecies.defaultVariant = await PokeApi.resource(`${pokemonSpecies.varieties[0].pokemon.url}`);
+
+          // Add the pokemon object to the array of pokemon objects retrieved in this request
+          pokemonObjects.push(pokemonSpecies);
         }
 
         // Add the array of pokemon objects retrieved in this request to the pokemon objects already in state
@@ -139,6 +144,7 @@ class App extends Component {
             dataLength={retrievedPokemon.length}
             next={this.getPokemon}
             hasMore={hasMore}
+            loader={<div className="loading-bar"><div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>}
           >
             <PokemonCardList pokemonList={retrievedPokemon} />
           </InfiniteScroll>
