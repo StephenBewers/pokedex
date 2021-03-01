@@ -17,13 +17,24 @@ class SearchBar extends Component {
     userInput: "",
   };
 
+  filterOptions = (options, userInput) => {
+    // Get the pokemon that begin with the user input string
+    const optionsStartingWithUserInput = options.filter((option) => option.toLowerCase().startsWith(userInput.toLowerCase()));
+
+    // Get the pokemon that contain the user input string
+    const optionsContainingUserInput = options.filter(
+      (option) => option.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+    );
+    
+    // Return the filtered options with those starting with the user input first
+    return optionsStartingWithUserInput.concat(optionsContainingUserInput.filter((option) => optionsStartingWithUserInput.indexOf(option) < 0));
+  }
+
   // When the text in the search bar changes, filter the list of pokemon and display the suggestions
   onChange = (event) => {
     const { options } = this.props;
     const userInput = event.currentTarget.value;
-    const filteredOptions = options.filter(
-      (option) => option.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-    );
+    const filteredOptions = this.filterOptions(options, userInput);
     this.setState({
       activeOption: 0,
       filteredOptions,
@@ -43,7 +54,7 @@ class SearchBar extends Component {
     });
   };
 
-  // Handle key events
+  // Handle key events for autocomplete suggestion list
   onKeyDown = (event) => {
     const { activeOption, filteredOptions } = this.state;
 
@@ -51,7 +62,7 @@ class SearchBar extends Component {
     if (event.keyCode === 13) {
       this.setState({
         activeOption: 0,
-        showSuggestions: false,
+        showOptions: false,
         userInput: filteredOptions[activeOption],
       });
     }
@@ -73,7 +84,7 @@ class SearchBar extends Component {
     }
   };
 
-  // Lists the options provided in JSX format for rendering
+  // Lists the autocomplete options provided in JSX format for rendering
   listOptions = (optionName, index) => {
     let className = "option";
     if (index === this.state.activeOption) {
@@ -95,7 +106,7 @@ class SearchBar extends Component {
       state: { filteredOptions, showOptions, userInput },
     } = this;
 
-    // Provide the JSX code for the suggestions list
+    // Provide the JSX code for the autocomplete suggestions list
     let optionList;
     if (showOptions && userInput) {
       // JSX if there are matching pokemon names in the list
@@ -103,16 +114,20 @@ class SearchBar extends Component {
         // If there are more than 5 options, only return the first 5
         if (filteredOptions.length > 5) {
           optionList = (
+            <div className="options-container">
             <ul className="options">
               {filteredOptions.slice(0, 5).map(listOptions)}
             </ul>
+            </div>
           );
         }
 
         // If there are 5 or fewer options, return all
         else {
           optionList = (
+            <div className="options-container">
             <ul className="options">{filteredOptions.map(listOptions)}</ul>
+            </div>
           );
         }
       }
@@ -120,8 +135,8 @@ class SearchBar extends Component {
       // JSX if there are no matching pokemon names in the list
       else {
         optionList = (
-          <div className="no-results">
-            <em>No pokémon found!</em>
+          <div className="options-container">
+          <p className="no-results"><em>No pokémon found with that name!</em></p>
           </div>
         );
       }
