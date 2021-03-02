@@ -8,8 +8,8 @@ class SearchBar extends Component {
   static propTypes = {
     options: PropTypes.instanceOf(Array).isRequired,
     additionalClass: PropTypes.string,
-    getPokemon: PropTypes.func,
-    getSpecificPokemon: PropTypes.func
+    resetPokemon: PropTypes.func,
+    getSpecificPokemon: PropTypes.func,
   };
 
   state = {
@@ -21,16 +21,22 @@ class SearchBar extends Component {
 
   filterOptions = (options, userInput) => {
     // Get the pokemon that begin with the user input string
-    const optionsStartingWithUserInput = options.filter((option) => option.toLowerCase().startsWith(userInput.toLowerCase()));
+    const optionsStartingWithUserInput = options.filter((option) =>
+      option.toLowerCase().startsWith(userInput.toLowerCase())
+    );
 
     // Get the pokemon that contain the user input string
     const optionsContainingUserInput = options.filter(
       (option) => option.toLowerCase().indexOf(userInput.toLowerCase()) > -1
     );
-    
+
     // Return the filtered options with those starting with the user input first
-    return optionsStartingWithUserInput.concat(optionsContainingUserInput.filter((option) => optionsStartingWithUserInput.indexOf(option) < 0));
-  }
+    return optionsStartingWithUserInput.concat(
+      optionsContainingUserInput.filter(
+        (option) => optionsStartingWithUserInput.indexOf(option) < 0
+      )
+    );
+  };
 
   // When the text in the search bar changes, filter the list of pokemon and display the suggestions
   onChange = (event) => {
@@ -46,7 +52,7 @@ class SearchBar extends Component {
   };
 
   // When the user selects one of the autocomplete suggestions, populate the search box with
-  // the selected pokemon name and stop displaying suggestions
+  // the selected pokemon name, load that pokemon card, and stop displaying suggestions
   onClick = (event) => {
     this.setState({
       activeOption: 0,
@@ -54,7 +60,9 @@ class SearchBar extends Component {
       showOptions: false,
       userInput: event.currentTarget.innerText,
     });
-    this.props.getSpecificPokemon([event.currentTarget.innerText.toLowerCase()]);
+    this.props.getSpecificPokemon([
+      event.currentTarget.innerText.toLowerCase(),
+    ]);
   };
 
   // Handle key events for autocomplete suggestion list
@@ -68,7 +76,9 @@ class SearchBar extends Component {
         showOptions: false,
         userInput: filteredOptions[activeOption],
       });
-      this.props.getSpecificPokemon([filteredOptions[activeOption].toLowerCase()]);
+      this.props.getSpecificPokemon([
+        filteredOptions[activeOption].toLowerCase(),
+      ]);
     }
 
     // Up arrow selects the suggestion above the currently selected option if not already at the top
@@ -85,6 +95,16 @@ class SearchBar extends Component {
         return;
       }
       this.setState({ activeOption: activeOption + 1 });
+    }
+
+    // Esc key clears the search box and all suggestions, and resets the cards to default
+    if (event.keyCode === 27) {
+      this.setState({
+        activeOption: 0,
+        filteredOption: [],
+        showOptions: false,
+      });
+      this.props.resetPokemon();
     }
   };
 
@@ -119,9 +139,9 @@ class SearchBar extends Component {
         if (filteredOptions.length > 5) {
           optionList = (
             <div className="options-container">
-            <ul className="options">
-              {filteredOptions.slice(0, 5).map(listOptions)}
-            </ul>
+              <ul className="options">
+                {filteredOptions.slice(0, 5).map(listOptions)}
+              </ul>
             </div>
           );
         }
@@ -130,7 +150,7 @@ class SearchBar extends Component {
         else {
           optionList = (
             <div className="options-container">
-            <ul className="options">{filteredOptions.map(listOptions)}</ul>
+              <ul className="options">{filteredOptions.map(listOptions)}</ul>
             </div>
           );
         }
@@ -140,7 +160,9 @@ class SearchBar extends Component {
       else {
         optionList = (
           <div className="options-container">
-          <p className="no-results"><em>No pokémon found with that name!</em></p>
+            <p className="no-results">
+              <em>No pokémon found with that name!</em>
+            </p>
           </div>
         );
       }

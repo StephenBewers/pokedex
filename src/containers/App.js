@@ -12,7 +12,7 @@ const PokeApi = new Pokedex.Pokedex(customOptions);
 class App extends Component {
   constructor() {
     super();
-    this.getPokemon = this.getPokemon.bind(this);
+    this.resetPokemon = this.resetPokemon.bind(this);
     this.getSpecificPokemon = this.getSpecificPokemon.bind(this);
     this.state = {
       pokemonNames: [],
@@ -49,29 +49,23 @@ class App extends Component {
     }
   };
 
-  // Retrieves the pokemon objects from the API
-  getPokemon = () => {
-    let { retrievedPokemon } = this.state;
-
-    // Number of pokemon to retrieve from the API per call
-    const { retrievalLimit } = this.state;
-
-    // If there are fewer pokemon in state than would be returned by one call, reset the state
-    if (retrievedPokemon.length < retrievalLimit) {
-      this.setState({ retrievedPokemon: [] });
-    }
+  // Retrieves the pokemon objects from the API from the total already retrieved (pass 0 to reset)
+  getPokemon = (totalAlreadyRetrieved) => {
+    let { retrievedPokemon, retrievalLimit } = this.state;
 
     // Compares the number of pokemon already in state to the total available from the API
     if (retrievedPokemon.length >= this.state.count) {
       // If there are no more to retrieve, set the hasMore flag to false
       this.setState({ hasMore: false });
       return;
+    } else {
+      this.setState({ hasMore: true });
     }
     try {
       (async () => {
         // The starting point and number of pokemon to retrieve from the API per request
         const interval = {
-          offset: retrievedPokemon.length,
+          offset: totalAlreadyRetrieved,
           limit: retrievalLimit,
         };
 
@@ -93,10 +87,18 @@ class App extends Component {
           pokemonObjects.push(pokemonSpecies);
         }
 
-        // Add the array of pokemon objects retrieved in this request to the pokemon objects already in state
-        this.setState({
-          retrievedPokemon: retrievedPokemon.concat(pokemonObjects),
-        });
+        // If there are fewer pokemon in state than would be returned by one call, replace the state with
+        // the pokemon objects retrieved in this request
+        if (totalAlreadyRetrieved < 1) {
+          this.setState({
+            retrievedPokemon: pokemonObjects,
+          });
+        } else {
+          // If not, add the array of pokemon objects retrieved in this request to the pokemon objects already in state
+          this.setState({
+            retrievedPokemon: retrievedPokemon.concat(pokemonObjects),
+          });
+        }
       })();
     } catch {
       console.error(`Failed to get Pokemon list`);
@@ -104,7 +106,7 @@ class App extends Component {
   };
 
   // Retrieves a single pokemon from the API
-  getSpecificPokemon(pokemonToGet) {
+  getSpecificPokemon = (pokemonToGet) => {
     try {
       (async () => {
         let pokemonObjects = [];
@@ -131,6 +133,16 @@ class App extends Component {
     } catch {
       console.error(`Unable to retrieve specified pokemon`);
     }
+  };
+
+  // Retrieves the next batch of pokemon for the infinite scroll
+  getMorePokemon = () => this.getPokemon(this.state.retrievedPokemon.length);
+
+  // Resets the UI before loading the pokemon
+  resetPokemon = () => {
+    this.setState({
+      retrievedPokemon: [],
+    }, this.getPokemon(0));
   }
 
   componentDidMount() {
@@ -140,7 +152,7 @@ class App extends Component {
     }
 
     // Retrieve the pokemon
-    this.getPokemon();
+    this.getMorePokemon();
 
     // Get the viewport height and width, and calculate the minimum
     const viewportHeight = Math.max(
@@ -192,13 +204,13 @@ class App extends Component {
           key={stickySearch}
           stickySearch={stickySearch}
           searchOptions={pokemonNames}
-          getPokemon={this.getPokemon}
+          resetPokemon={this.resetPokemon}
           getSpecificPokemon={this.getSpecificPokemon}
         ></Header>
         <main>
           <InfiniteScroll
             dataLength={retrievedPokemon.length}
-            next={this.getPokemon}
+            next={this.getMorePokemon}
             hasMore={hasMore}
             loader={
               <div className="loading-bar">
