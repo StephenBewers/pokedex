@@ -12,7 +12,7 @@ const PokemonCardList = ({ pokemonList }) => {
             key={pokemon.id}
             number={pokemon.pokedex_numbers[0].entry_number}
             name={pokemon.name}
-            type={pokemon.defaultVariant.types[0].type.name}
+            types={pokemon.defaultVariant.types}
             image={pokemon.defaultVariant.sprites.other["official-artwork"].front_default}
           />
         );

@@ -2,10 +2,13 @@
   font-family: "Pokemon Solid";
   font-style: normal;
   font-weight: normal;
-  src: local("../Pokemon\ Solid.ttf"), url("../Pokemon\ Solid.ttf") format("truetype");
-  }
+  src: local("../assets/fonts/Pokemon\ Solid.ttf"),
+    url("../assets/fonts/Pokemon\ Solid.ttf") format("truetype");
+}
 
 $text-stroke: 0 0 2px black;
+$border-radius: 8px;
+$image-mask: linear-gradient(to bottom right, transparent 35%, black 65%);
 
 @mixin text-style {
   margin: 5%;
@@ -16,17 +19,33 @@ $text-stroke: 0 0 2px black;
   text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
 }
 
+@mixin background-style {
+  border-radius: $border-radius;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+@mixin secondary-type-pseudo {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  mask-image: $image-mask;
+  -webkit-mask-image: $image-mask;
+}
+
+.glare-wrapper {
+  border-radius: $border-radius;
+}
+
 .pokemon-card {
   height: 100%;
   width: 100%;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-
-  border-radius: 8px;
-  background-color: transparent;
+  @include background-style;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
   transform-style: preserve-3d;
@@ -47,5 +66,164 @@ $text-stroke: 0 0 2px black;
     @include text-style;
     font-size: calc(12px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
     text-transform: capitalize;
+  }
+}
+
+// Pokemon type backgrounds
+.bug-type {
+  background-image: url("../assets/images/bug.jpg");
+}
+.dark-type {
+  background-image: url("../assets/images/dark.jpg");
+}
+.dragon-type {
+  background-image: url("../assets/images/dragon.jpg");
+}
+.electric-type {
+  background-image: url("../assets/images/electric.jpg");
+}
+.fairy-type {
+  background-image: url("../assets/images/fairy.jpg");
+}
+.fighting-type {
+  background-image: url("../assets/images/fighting.jpg");
+}
+.fire-type {
+  background-image: url("../assets/images/fire.jpg");
+}
+.flying-type {
+  background-image: url("../assets/images/flying.jpg");
+}
+.ghost-type {
+  background-image: url("../assets/images/ghost.jpg");
+}
+.grass-type {
+  background-image: url("../assets/images/grass.jpg");
+}
+.ground-type {
+  background-image: url("../assets/images/ground.jpg");
+}
+.ice-type {
+  background-image: url("../assets/images/ice.jpg");
+}
+.normal-type {
+  background-image: url("../assets/images/normal.jpg");
+}
+.poison-type {
+  background-image: url("../assets/images/poison.jpg");
+}
+.psychic-type {
+  background-image: url("../assets/images/psychic.jpg");
+}
+.rock-type {
+  background-image: url("../assets/images/rock.jpg");
+}
+.steel-type {
+  background-image: url("../assets/images/steel.jpg");
+}
+.water-type {
+  background-image: url("../assets/images/water.jpg");
+}
+
+.secondary-type {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  @include background-style;
+
+  &.bug::after {
+    @extend .bug-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.dark::after {
+    @extend .dark-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.dragon::after {
+    @extend .dragon-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.electric::after {
+    @extend .electric-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.fairy::after {
+    @extend .fairy-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.fighting::after {
+    @extend .fighting-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.fire::after {
+    @extend .fire-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.flying::after {
+    @extend .flying-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.ghost::after {
+    @extend .ghost-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.grass::after {
+    @extend .grass-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.ground::after {
+    @extend .ground-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.ice::after {
+    @extend .ice-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.normal::after {
+    @extend .normal-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.poison::after {
+    @extend .poison-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.psychic::after {
+    @extend .psychic-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.rock::after {
+    @extend .rock-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.steel::after {
+    @extend .steel-type;
+    @include background-style;
+    @include secondary-type-pseudo;
+  }
+  &.water::after {
+    @extend .water-type;
+    @include background-style;
+    @include secondary-type-pseudo;
   }
 }

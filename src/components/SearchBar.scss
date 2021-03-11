@@ -2,8 +2,8 @@
   font-family: "Pokemon Solid";
   font-style: normal;
   font-weight: normal;
-  src: local("../Pokemon\ Solid.ttf"),
-    url("../Pokemon\ Solid.ttf") format("truetype");
+  src: local("../assets/fonts/Pokemon\ Solid.ttf"),
+    url("../assets/fonts/Pokemon\ Solid.ttf") format("truetype");
 }
 
 @mixin search-bar-dimensions {
