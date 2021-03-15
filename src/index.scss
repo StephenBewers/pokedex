@@ -1,5 +1,7 @@
 body {
-  background-color: #fff;
+  background: url(../src/assets/images/background.png) no-repeat fixed center;
+  background-size: cover;
+  overflow-y: scroll;
   margin: 0;
   padding-bottom: 20vmin;
 }

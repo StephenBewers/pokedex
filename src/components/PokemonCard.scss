@@ -19,13 +19,12 @@ $image-mask: linear-gradient(to bottom right, transparent 35%, black 65%);
   text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
 }
 
-@mixin background-style {
-  border-radius: $border-radius;
-  background-size: 100% 100%;
-  background-position: center;
+@mixin type-background($color, $image) {
+  background: linear-gradient(rgba($color, 0.8),rgba($color, 0.8)), $image, $color;
+  background-repeat: space;
 }
 
-@mixin secondary-type-pseudo {
+@mixin secondary-type-pseudo-style {
   content: "";
   position: absolute;
   z-index: -1;
@@ -35,6 +34,83 @@ $image-mask: linear-gradient(to bottom right, transparent 35%, black 65%);
   height: 100%;
   mask-image: $image-mask;
   -webkit-mask-image: $image-mask;
+  border-radius: $border-radius;
+}
+
+// Pokemon type colours
+$bug-color: #829e17;
+$dark-color: #1c262b;
+$dragon-color: #421aa3;
+$electric-color: #e9bf0b;
+$fairy-color: #fb6883;
+$fighting-color: #a4241e;
+$fire-color: #ff8202;
+$flying-color: #3592f9;
+$ghost-color: #373140;
+$grass-color: #42750c;
+$ground-color: #725a4a;
+$ice-color: #7da5d1;
+$normal-color: #a08463;
+$poison-color: #50396d;
+$psychic-color: #8c3a7b;
+$rock-color: #544c4b;
+$steel-color: #849199;
+$water-color: #0474a4;
+
+// Pokemon type backgrounds
+.bug-type {
+  @include type-background($bug-color, url("../assets/images/bug-icon.png"));
+}
+.dark-type {
+  @include type-background($dark-color, url("../assets/images/dark-icon.png"));
+}
+.dragon-type {
+  @include type-background($dragon-color, url("../assets/images/dragon-icon.png"));
+}
+.electric-type {
+  @include type-background($electric-color, url("../assets/images/electric-icon.png"));
+}
+.fairy-type {
+  @include type-background($fairy-color, url("../assets/images/fairy-icon.png"));
+}
+.fighting-type {
+  @include type-background($fighting-color, url("../assets/images/fighting-icon.png"));
+}
+.fire-type {
+  @include type-background($fire-color, url("../assets/images/fire-icon.png"));
+}
+.flying-type {
+  @include type-background($flying-color, url("../assets/images/flying-icon.png"));
+}
+.ghost-type {
+  @include type-background($ghost-color, url("../assets/images/ghost-icon.png"));
+}
+.grass-type {
+  @include type-background($grass-color, url("../assets/images/grass-icon.png"));
+}
+.ground-type {
+  @include type-background($ground-color, url("../assets/images/ground-icon.png"));
+}
+.ice-type {
+  @include type-background($ice-color, url("../assets/images/ice-icon.png"));
+}
+.normal-type {
+  @include type-background($normal-color, url("../assets/images/normal-icon.png"));
+}
+.poison-type {
+  @include type-background($poison-color, url("../assets/images/poison-icon.png"));
+}
+.psychic-type {
+  @include type-background($psychic-color, url("../assets/images/psychic-icon.png"));
+}
+.rock-type {
+  @include type-background($rock-color, url("../assets/images/rock-icon.png"));
+}
+.steel-type {
+  @include type-background($steel-color, url("../assets/images/steel-icon.png"));
+}
+.water-type {
+  @include type-background($water-color, url("../assets/images/water-icon.png"));
 }
 
 .glare-wrapper {
@@ -45,8 +121,13 @@ $image-mask: linear-gradient(to bottom right, transparent 35%, black 65%);
   height: 100%;
   width: 100%;
 
-  @include background-style;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: $border-radius;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6), 0 6px 20px 0 rgba(0, 0, 0, 0.6);
 
   transform-style: preserve-3d;
 
@@ -67,163 +148,78 @@ $image-mask: linear-gradient(to bottom right, transparent 35%, black 65%);
     font-size: calc(12px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
     text-transform: capitalize;
   }
-}
 
-// Pokemon type backgrounds
-.bug-type {
-  background-image: url("../assets/images/bug.jpg");
-}
-.dark-type {
-  background-image: url("../assets/images/dark.jpg");
-}
-.dragon-type {
-  background-image: url("../assets/images/dragon.jpg");
-}
-.electric-type {
-  background-image: url("../assets/images/electric.jpg");
-}
-.fairy-type {
-  background-image: url("../assets/images/fairy.jpg");
-}
-.fighting-type {
-  background-image: url("../assets/images/fighting.jpg");
-}
-.fire-type {
-  background-image: url("../assets/images/fire.jpg");
-}
-.flying-type {
-  background-image: url("../assets/images/flying.jpg");
-}
-.ghost-type {
-  background-image: url("../assets/images/ghost.jpg");
-}
-.grass-type {
-  background-image: url("../assets/images/grass.jpg");
-}
-.ground-type {
-  background-image: url("../assets/images/ground.jpg");
-}
-.ice-type {
-  background-image: url("../assets/images/ice.jpg");
-}
-.normal-type {
-  background-image: url("../assets/images/normal.jpg");
-}
-.poison-type {
-  background-image: url("../assets/images/poison.jpg");
-}
-.psychic-type {
-  background-image: url("../assets/images/psychic.jpg");
-}
-.rock-type {
-  background-image: url("../assets/images/rock.jpg");
-}
-.steel-type {
-  background-image: url("../assets/images/steel.jpg");
-}
-.water-type {
-  background-image: url("../assets/images/water.jpg");
-}
-
-.secondary-type {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-
-  @include background-style;
-
-  &.bug::after {
+  &.bug-secondary::after {
     @extend .bug-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.dark::after {
+  &.dark-secondary::after {
     @extend .dark-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.dragon::after {
+  &.dragon-secondary::after {
     @extend .dragon-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.electric::after {
+  &.electric-secondary::after {
     @extend .electric-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.fairy::after {
+  &.fairy-secondary::after {
     @extend .fairy-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.fighting::after {
+  &.fighting-secondary::after {
     @extend .fighting-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.fire::after {
+  &.fire-secondary::after {
     @extend .fire-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.flying::after {
+  &.flying-secondary::after {
     @extend .flying-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.ghost::after {
+  &.ghost-secondary::after {
     @extend .ghost-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.grass::after {
+  &.grass-secondary::after {
     @extend .grass-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.ground::after {
+  &.ground-secondary::after {
     @extend .ground-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.ice::after {
+  &.ice-secondary::after {
     @extend .ice-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.normal::after {
+  &.normal-secondary::after {
     @extend .normal-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.poison::after {
+  &.poison-secondary::after {
     @extend .poison-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.psychic::after {
+  &.psychic-secondary::after {
     @extend .psychic-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.rock::after {
+  &.rock-secondary::after {
     @extend .rock-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.steel::after {
+  &.steel-secondary::after {
     @extend .steel-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
-  &.water::after {
+  &.water-secondary::after {
     @extend .water-type;
-    @include background-style;
-    @include secondary-type-pseudo;
+    @include secondary-type-pseudo-style;
   }
+
 }
