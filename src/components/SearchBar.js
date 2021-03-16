@@ -16,6 +16,7 @@ class SearchBar extends Component {
     activeOption: 0,
     filteredOptions: [],
     showOptions: false,
+    defaultView: true,
     userInput: "",
   };
 
@@ -38,17 +39,37 @@ class SearchBar extends Component {
     );
   };
 
+  // Resets the view to display all pokemon with no autocomplete options displayed
+  resetView = () => {
+    if (!this.state.defaultView) {
+      this.props.resetPokemon();
+    }
+    this.setState({
+      activeOption: 0,
+      filteredOptions: [],
+      showOptions: false,
+      defaultView: true,
+      userInput: "",
+    });
+  };
+
   // When the text in the search bar changes, filter the list of pokemon and display the suggestions
   onChange = (event) => {
     const { options } = this.props;
     const userInput = event.currentTarget.value;
-    const filteredOptions = this.filterOptions(options, userInput);
-    this.setState({
-      activeOption: 0,
-      filteredOptions,
-      showOptions: true,
-      userInput,
-    });
+    if (userInput.length) {
+      const filteredOptions = this.filterOptions(options, userInput);
+      this.setState({
+        activeOption: 0,
+        filteredOptions,
+        showOptions: true,
+        userInput,
+      });
+    }
+    // If user input has been cleared, reset the view
+    else {
+      this.resetView();
+    }
   };
 
   // When the user selects one of the autocomplete suggestions, populate the search box with
@@ -58,6 +79,7 @@ class SearchBar extends Component {
       activeOption: 0,
       filteredOption: [],
       showOptions: false,
+      defaultView: false,
       userInput: event.currentTarget.innerText,
     });
     this.props.getSpecificPokemon([
@@ -74,6 +96,7 @@ class SearchBar extends Component {
       this.setState({
         activeOption: 0,
         showOptions: false,
+        defaultView: false,
         userInput: filteredOptions[activeOption],
       });
       this.props.getSpecificPokemon([
@@ -97,14 +120,9 @@ class SearchBar extends Component {
       this.setState({ activeOption: activeOption + 1 });
     }
 
-    // Esc key clears the search box and all suggestions, and resets the cards to default
+    // Esc key resets the view
     if (event.keyCode === 27) {
-      this.setState({
-        activeOption: 0,
-        filteredOption: [],
-        showOptions: false,
-      });
-      this.props.resetPokemon();
+      this.resetView();
     }
   };
 

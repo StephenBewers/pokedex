@@ -58,7 +58,7 @@
 .search-box {
   width: 100%;
   padding: 0.25em 1em 0.25em 1em;
-  flex-grow:2;
+  flex-grow: 2;
   
   font-family: "Pokemon Solid";
   letter-spacing: 0.1em;
@@ -69,6 +69,11 @@
   @media (max-width: 480px) {
     font-size: 0.8em;
     letter-spacing: 0.08em;
+  }
+
+  &:focus-within {
+    box-shadow: 0;
+    outline: 0;
   }
 }
 
