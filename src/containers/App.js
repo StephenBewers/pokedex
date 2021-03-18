@@ -140,10 +140,13 @@ class App extends Component {
 
   // Resets the UI before loading the pokemon
   resetPokemon = () => {
-    this.setState({
-      retrievedPokemon: [],
-    }, this.getPokemon(0));
-  }
+    this.setState(
+      {
+        retrievedPokemon: [],
+      },
+      this.getPokemon(0)
+    );
+  };
 
   componentDidMount() {
     // If the pokemon names list is empty, get the pokemon names
@@ -198,6 +201,9 @@ class App extends Component {
       hasMore,
       stickySearch,
     } = this.state;
+    const loadingLabel = retrievedPokemon.length
+      ? "Looking for more pokémon"
+      : "Looking for pokémon";
     return (
       <>
         <Header
@@ -212,8 +218,10 @@ class App extends Component {
             dataLength={retrievedPokemon.length}
             next={this.getMorePokemon}
             hasMore={hasMore}
+            scrollThreshold="25%"
             loader={
               <div className="loading-bar">
+                <p className="loading-label">{loadingLabel}</p>
                 <div className="lds-ellipsis">
                   <div></div>
                   <div></div>
