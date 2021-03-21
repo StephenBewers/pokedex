@@ -79,9 +79,13 @@ class App extends Component {
           let pokemonSpecies = await PokeApi.resource(`${item.url}`);
 
           // Get the data for the default variant of the species and store it in the object
-          pokemonSpecies.defaultVariant = await PokeApi.resource(
-            `${pokemonSpecies.varieties[0].pokemon.url}`
-          );
+          for (let i = 0; i < pokemonSpecies.varieties.length; i++) {
+            if (pokemonSpecies.varieties[i].is_default) {
+              pokemonSpecies.defaultVariant = await PokeApi.resource(
+                `${pokemonSpecies.varieties[i].pokemon.url}`
+              );
+            }
+          }
 
           // Add the pokemon object to the array of pokemon objects retrieved in this request
           pokemonObjects.push(pokemonSpecies);
