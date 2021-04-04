@@ -10,7 +10,6 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
     "bootstrap": "^4.6.0",
-    "node-sass": "^5.0.0",
     "pokeapi-js-wrapper": "^1.2.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
@@ -19,6 +18,7 @@
     "react-infinite-scroll-component": "^6.0.0",
     "react-parallax-tilt": "^1.4.81",
     "react-scripts": "4.0.2",
+    "sass": "^1.32.8",
     "web-vitals": "^1.1.0"
   },
   "scripts": {
