@@ -22,6 +22,7 @@
   left: 0;
   width: 100%;
   height: 100%;
+  border-radius: inherit;
   mask-image: $image-mask;
   -webkit-mask-image: $image-mask;
 }
