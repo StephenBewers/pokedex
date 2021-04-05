@@ -8,11 +8,36 @@ class PokemonCardList extends Component {
     super(props);
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.getNumberWithLeadingZeros = this.getNumberWithLeadingZeros.bind(this);
     this.state = {
       displayModal: false,
       modalPokemon: "",
     };
   }
+
+  // Appends the leading zeros to the pokemon number
+  getNumberWithLeadingZeros = (number, length) => {
+    let pokemonNumber = "" + number;
+    while (pokemonNumber.length < length) {
+      pokemonNumber = "0" + pokemonNumber;
+    }
+    return pokemonNumber;
+  };
+
+  // Determines if the modal should be rendered or not
+  renderModal = () => {
+    if (this.state.displayModal) {
+      return (
+        <Modal
+          displayModal={this.state.displayModal}
+          pokemon={this.state.modalPokemon}
+          hideModal={this.hideModal}
+          showModal={this.showModal}
+          getNumberWithLeadingZeros={this.getNumberWithLeadingZeros}
+        />
+      );
+    }
+  };
 
   // Displays the modal with the pokemon information
   showModal = (pokemon) => {
@@ -30,12 +55,7 @@ class PokemonCardList extends Component {
   render() {
     return (
       <>
-        <Modal
-          displayModal={this.state.displayModal}
-          pokemon={this.state.modalPokemon}
-          hideModal={this.hideModal}
-          showModal={this.showModal}
-        />
+        {this.renderModal()}
         <div className="card-list">
           {this.props.pokemonList.map((pokemon, i) => {
             return (
@@ -43,6 +63,7 @@ class PokemonCardList extends Component {
                 key={pokemon.id}
                 pokemon={pokemon}
                 clickHandler={this.showModal}
+                getNumberWithLeadingZeros={this.getNumberWithLeadingZeros}
               />
             );
           })}

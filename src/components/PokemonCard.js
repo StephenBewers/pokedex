@@ -2,13 +2,13 @@ import React from "react";
 import Tilt from "react-parallax-tilt";
 import "./PokemonCard.scss";
 
-const PokemonCard = ({ pokemon, clickHandler }) => {
-
+const PokemonCard = ({ pokemon, clickHandler, getNumberWithLeadingZeros }) => {
   // Get pokemon information for display on the card
   const number = pokemon.pokedex_numbers[0].entry_number;
   const name = pokemon.name;
   const types = pokemon.defaultVariant.types;
-  const image = pokemon.defaultVariant.sprites.other["official-artwork"].front_default;
+  const image =
+    pokemon.defaultVariant.sprites.other["official-artwork"].front_default;
 
   const primaryTypeClass = `${types[0].type.name}-type`;
 
@@ -25,7 +25,9 @@ const PokemonCard = ({ pokemon, clickHandler }) => {
         glareMaxOpacity={0.45}
         scale={1.02}
       >
-        <span className="pokemon-number">{number}</span>
+        <span className="pokemon-number">
+          {getNumberWithLeadingZeros(number, 3)}
+        </span>
         <img className="pokemon-img" src={image} alt={name} />
         <span className="pokemon-name">{name}</span>
       </Tilt>
