@@ -7,6 +7,7 @@ import TypeBtn from "./TypeBtn";
 import ModalRow from "./ModalRow";
 import ModalDescription from "./ModalDescription";
 import ModalInfoItem from "./ModalInfoItem";
+import ModalInfoValue from "./ModalInfoValue";
 
 class Modal extends Component {
   static propTypes = {
@@ -33,13 +34,6 @@ class Modal extends Component {
     // If the displayModal state becomes false, hide the modal
     const visibleClassName = displayModal ? "visible" : "hidden";
 
-    // Get pokemon information for display on the modal
-    const types = pokemon.defaultVariant.types;
-    const weight = pokemon.defaultVariant.weight;
-    const height = pokemon.defaultVariant.height;
-    const habitat = pokemon.habitat?.name;
-    const captureRate = pokemon.capture_rate;
-
     // Gets the pokemon height in metres
     const getHeightInMetres = (height) => {
       return height / 10;
@@ -65,9 +59,26 @@ class Modal extends Component {
       return (getWeightInKilograms(weight) * 2.205).toFixed(1);
     };
 
+    // Get catch rate as a percentage
     const getCapturePercent = (captureRate) => {
       return ((captureRate / 255) * 100).toFixed(2);
     };
+
+    // Get pokemon information for display on the modal
+    const types = pokemon.defaultVariant.types;
+    const habitat = pokemon.habitat?.name;
+    const height = pokemon.defaultVariant.height;
+    const heightInMetres = getHeightInMetres(height);
+    const heightInFeetInches = `${parseInt(
+      getHeightInFeet(height)
+    )}' ${parseInt(getHeightRemainingInches(height))}"`;
+    const weight = pokemon.defaultVariant.weight;
+    const weightInKilos = getWeightInKilograms(weight);
+    const weightInPounds = getWeightInPounds(weight);
+    const captureRate = pokemon.capture_rate;
+    const capturePercent = getCapturePercent(captureRate);
+
+    getHeightInMetres(height);
 
     return (
       <div className={`modal ${visibleClassName}`} onClick={hideModal}>
@@ -82,45 +93,53 @@ class Modal extends Component {
               <ModalDescription pokemon={pokemon} />
             </ModalRow>
             <ModalRow>
-              <ModalInfoItem label="Types" id="modal-types">
-                {types.map((type, i) => {
-                  return (
-                    <TypeBtn
-                      type={type.type.name}
-                      key={`type-btn-${i}`}
-                    ></TypeBtn>
-                  );
-                })}
-              </ModalInfoItem>
-              <ModalInfoItem label="Habitat" id="modal-habitat">
-                <span className="modal-info-value">{habitat}</span>
-              </ModalInfoItem>
-            </ModalRow>
-            <ModalRow>
-              <ModalInfoItem label="Height" id="modal-height">
-                <span className="modal-info-value">
-                  {getHeightInMetres(height)}
-                  <span className="modal-info-unit">m</span>
-                  &nbsp;({parseInt(getHeightInFeet(height))}'{" "}
-                  {parseInt(getHeightRemainingInches(height))}"
-                  <span className="modal-info-unit">ft/in</span>)
-                </span>
-              </ModalInfoItem>
-              <ModalInfoItem label="Weight" id="modal-weight">
-                <span className="modal-info-value">
-                  {getWeightInKilograms(weight)}
-                  <span className="modal-info-unit">kg</span>
-                  &nbsp;({getWeightInPounds(weight)}
-                  <span className="modal-info-unit">lb</span>)
-                </span>
-              </ModalInfoItem>
-              <ModalInfoItem label="Catch rate" id="modal-catch-rate">
-                <span className="modal-info-value">
-                  {captureRate}
-                  &nbsp;({getCapturePercent(captureRate)}
-                  <span className="modal-info-unit">%</span>)
-                </span>
-              </ModalInfoItem>
+              <ModalRow>
+                <ModalInfoItem label="Types" id="modal-types">
+                  {types.map((type, i) => {
+                    return (
+                      <TypeBtn
+                        type={type.type.name}
+                        key={`type-btn-${i}`}
+                      ></TypeBtn>
+                    );
+                  })}
+                </ModalInfoItem>
+                <ModalInfoItem label="Habitat" id="modal-habitat">
+                  <ModalInfoValue value={habitat}></ModalInfoValue>
+                </ModalInfoItem>
+              </ModalRow>
+              <ModalRow>
+                <ModalInfoItem label="Height" id="modal-height">
+                  <ModalInfoValue
+                    value={heightInMetres}
+                    unit="m"
+                  ></ModalInfoValue>
+                  <ModalInfoValue
+                    value={heightInFeetInches}
+                    unit="ft/in"
+                    alternative={true}
+                  ></ModalInfoValue>
+                </ModalInfoItem>
+                <ModalInfoItem label="Weight" id="modal-weight">
+                  <ModalInfoValue
+                    value={weightInKilos}
+                    unit="kg"
+                  ></ModalInfoValue>
+                  <ModalInfoValue
+                    value={weightInPounds}
+                    unit="lb"
+                    alternative={true}
+                  ></ModalInfoValue>
+                </ModalInfoItem>
+                <ModalInfoItem label="Catch rate" id="modal-catch-rate">
+                  <ModalInfoValue value={captureRate}></ModalInfoValue>
+                  <ModalInfoValue
+                    value={capturePercent}
+                    unit="%"
+                    alternative={true}
+                  ></ModalInfoValue>
+                </ModalInfoItem>
+              </ModalRow>
             </ModalRow>
           </div>
         </section>

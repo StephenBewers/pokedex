@@ -1,0 +1,24 @@
+.modal-info-value {
+  font-size: 1.3em;
+  min-width: 66px;
+
+  .modal-info-unit {
+    font-size: 0.9em;
+    padding-left: 0.4em;
+    align-self: center;
+  }
+}
+
+// TODO: Alternative style for alternative values. Using placeholder styles for now.
+
+.modal-info-alternative-value {
+  font-size: 1.3em;
+  color:mediumblue;
+  min-width: 66px;
+
+  .modal-info-alternative-unit {
+    font-size: 0.9em;
+    padding-left: 0.4em;
+    align-self: center;
+  }
+}
