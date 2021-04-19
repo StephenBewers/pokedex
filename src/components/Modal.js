@@ -1,17 +1,26 @@
 import React, { Component } from "react";
 import "./Modal.scss";
 import PropTypes from "prop-types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import ModalExitBtn from "./ModalExitBtn.js";
+import ModalImagePanel from "./ModalImagePanel.js";
+import TypeBtn from "./TypeBtn";
+import ModalRow from "./ModalRow";
+import ModalDescription from "./ModalDescription";
+import ModalInfoItem from "./ModalInfoItem";
 
 class Modal extends Component {
   static propTypes = {
-    displayModal: PropTypes.func,
+    displayModal: PropTypes.bool,
     pokemon: PropTypes.object.isRequired,
     hideModal: PropTypes.func,
     showModal: PropTypes.func,
     getNumberWithLeadingZeros: PropTypes.func,
   };
+
+  // Prevents clicks on the inner modal div triggering the outer modal click event
+  innerModalClick(event) {
+    event.stopPropagation();
+  }
 
   render() {
     const {
@@ -25,35 +34,95 @@ class Modal extends Component {
     const visibleClassName = displayModal ? "visible" : "hidden";
 
     // Get pokemon information for display on the modal
-    const number = pokemon.pokedex_numbers[0].entry_number;
-    const name = pokemon.name;
     const types = pokemon.defaultVariant.types;
-    const image =
-      pokemon.defaultVariant.sprites.other["official-artwork"].front_default;
+    const weight = pokemon.defaultVariant.weight;
+    const height = pokemon.defaultVariant.height;
+    const habitat = pokemon.habitat?.name;
+    const captureRate = pokemon.capture_rate;
 
-    // Type class for modal image panel background
-    const primaryTypeClass = `${types[0].type.name}-type`;
+    // Gets the pokemon height in metres
+    const getHeightInMetres = (height) => {
+      return height / 10;
+    };
 
-    // If the pokemon has a second type, get the second type class for modal image panel background
-    const secondaryTypeClass =
-      types.length > 1 ? `${types[1].type.name}-secondary` : "";
+    // Gets the pokemon height in feet
+    const getHeightInFeet = (height) => {
+      return getHeightInMetres(height) * 3.28084;
+    };
+
+    // Gets the remaining inches from the pokemon height in feet
+    const getHeightRemainingInches = (height) => {
+      return (getHeightInMetres(height) % 1) * 12;
+    };
+
+    // Gets the pokemon weight in kilograms
+    const getWeightInKilograms = (weight) => {
+      return weight / 10;
+    };
+
+    // Gets the pokemon weight in pounds
+    const getWeightInPounds = (weight) => {
+      return (getWeightInKilograms(weight) * 2.205).toFixed(1);
+    };
+
+    const getCapturePercent = (captureRate) => {
+      return ((captureRate / 255) * 100).toFixed(2);
+    };
 
     return (
       <div className={`modal ${visibleClassName}`} onClick={hideModal}>
-        <section className="modal-main">
-          <div className="btn-modal-exit" role="button" onClick={hideModal}>
-            <FontAwesomeIcon icon={faTimes} />
+        <section className="modal-main" onClick={this.innerModalClick}>
+          <ModalExitBtn hideModal={hideModal} />
+          <ModalImagePanel
+            pokemon={pokemon}
+            getNumberWithLeadingZeros={getNumberWithLeadingZeros}
+          />
+          <div className="modal-info-panel">
+            <ModalRow>
+              <ModalDescription pokemon={pokemon} />
+            </ModalRow>
+            <ModalRow>
+              <ModalInfoItem label="Types" id="modal-types">
+                {types.map((type, i) => {
+                  return (
+                    <TypeBtn
+                      type={type.type.name}
+                      key={`type-btn-${i}`}
+                    ></TypeBtn>
+                  );
+                })}
+              </ModalInfoItem>
+              <ModalInfoItem label="Habitat" id="modal-habitat">
+                <span className="modal-info-value">{habitat}</span>
+              </ModalInfoItem>
+            </ModalRow>
+            <ModalRow>
+              <ModalInfoItem label="Height" id="modal-height">
+                <span className="modal-info-value">
+                  {getHeightInMetres(height)}
+                  <span className="modal-info-unit">m</span>
+                  &nbsp;({parseInt(getHeightInFeet(height))}'{" "}
+                  {parseInt(getHeightRemainingInches(height))}"
+                  <span className="modal-info-unit">ft/in</span>)
+                </span>
+              </ModalInfoItem>
+              <ModalInfoItem label="Weight" id="modal-weight">
+                <span className="modal-info-value">
+                  {getWeightInKilograms(weight)}
+                  <span className="modal-info-unit">kg</span>
+                  &nbsp;({getWeightInPounds(weight)}
+                  <span className="modal-info-unit">lb</span>)
+                </span>
+              </ModalInfoItem>
+              <ModalInfoItem label="Catch rate" id="modal-catch-rate">
+                <span className="modal-info-value">
+                  {captureRate}
+                  &nbsp;({getCapturePercent(captureRate)}
+                  <span className="modal-info-unit">%</span>)
+                </span>
+              </ModalInfoItem>
+            </ModalRow>
           </div>
-          <div
-            className={`modal-img-panel ${primaryTypeClass} ${secondaryTypeClass}`}
-          >
-            <span className="modal-number">
-              {getNumberWithLeadingZeros(number, 3)}
-            </span>
-            <img className="modal-img" src={image} alt={name} />
-            <h2>{name}</h2>
-          </div>
-          <div className="modal-info-panel"></div>
         </section>
       </div>
     );

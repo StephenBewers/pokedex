@@ -1,26 +1,12 @@
 @use '../containers/App';
 
-$text-stroke: 0 0 2px black;
-$border-radius: 16px;
-$img-panel-z-index: 5;
-
-@mixin text-style {
-  margin: 5%;
-  z-index: $img-panel-z-index;
-
-  font-family: "Pokemon Solid";
-  letter-spacing: 4px;
-  color: #fff;
-  text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
-}
-
 .modal {
   position: fixed;
   z-index: 998;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background: rgba(0, 0, 0, 0.75);
 
   &.visible {
@@ -34,61 +20,63 @@ $img-panel-z-index: 5;
 
 .modal-main {
   position: fixed;
-  overflow: hidden;
   display: flex;
   flex-flow: row wrap;
+  align-items: flex-start;
   z-index: 999;
   width: 90%;
   height: 90%;
   top: 50%;
   left: 50%;
+  overflow: hidden;
   transform: translate(-50%, -50%);
 
   background-color: white;
-  border-radius: $border-radius;
+  border-radius: 16px;
+
+  @media (max-width: 1000px) {
+    overflow-y: auto;
+  }
 }
 
-.btn-modal-exit {
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding: 12px;
-
-  color: #fff;
-
-  background-color: rgba(0, 0, 0, 0.15);
-  border-radius: 0px 0px 0px $border-radius;
-
-  cursor: pointer;
+hr.solid {
+  border: none;
+  height: 0.5px;
+  background-color: #bbb;
+  width: 100%;
 }
 
-.modal-img-panel {
-  position: relative;
-  flex: 1 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-
-  .modal-number {
-    @include text-style;
-    font-size: calc(22px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
-  }
-
-  img {
-    z-index: $img-panel-z-index;
-    max-width: 30vh;
-    max-height: 30vh;
-  }
-
-  h2 {
-    @include text-style;
-    font-size: calc(30px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
-    text-transform: capitalize;
-  }
+div.vertical-divider {
+  margin: 0px 24px 0px 24px;
+  border-right: 1px solid #bbb;
+  height: 100%;
 }
 
 .modal-info-panel {
-  flex: 5 auto;
-  padding: 2%;
+  flex: 1 60%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 5vmax;
+  padding: 0px 3vmax 3vmax 3vmax;
+  font-family: "Quicksand", sans-serif;
+  overflow-y: auto;
+  @media (max-width: 720px) {
+    margin-top: 7vmax;
+  }
+}
+
+.modal-info-row {
+  display: flex;
+  flex-flow: row wrap;
+
+  @media (max-width: 720px) {
+    flex-flow: column nowrap;
+  }
+}
+
+.modal-info-section-column {
+  flex: 1 50%;
+  padding: 12px 0px 12px 0px;
+  display: flex;
+  flex-direction: column;
 }

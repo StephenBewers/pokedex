@@ -1,0 +1,84 @@
+@use '../containers/App';
+
+.modal-type-btn {
+  width: 7em;
+  margin: 0.5em 0.5em 0em 0em;
+  padding: 6px;
+  color: #fff;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 0.85em;
+  font-weight: bold;
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition: box-shadow 0.1s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 5px 4px cornflowerblue;
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+    object-fit: none;
+    margin-right: 0.5em;
+  }
+}
+
+.bug-btn {
+  background-color: App.$bug-color;
+}
+.dark-btn {
+  background-color: App.$dark-color;
+}
+.dragon-btn {
+  background-color: App.$dragon-color;
+}
+.electric-btn {
+  background-color: App.$electric-color;
+}
+.fairy-btn {
+  background-color: App.$fairy-color;
+}
+.fighting-btn {
+  background-color: App.$fighting-color;
+}
+.fire-btn {
+  background-color: App.$fire-color;
+}
+.flying-btn {
+  background-color: App.$flying-color;
+}
+.ghost-btn {
+  background-color: App.$ghost-color;
+}
+.grass-btn {
+  background-color: App.$grass-color;
+}
+.ground-btn {
+  background-color: App.$ground-color;
+}
+.ice-btn {
+  background-color: App.$ice-color;
+}
+.normal-btn {
+  background-color: App.$normal-color;
+}
+.poison-btn {
+  background-color: App.$poison-color;
+}
+.psychic-btn {
+  background-color: App.$psychic-color;
+}
+.rock-btn {
+  background-color: App.$rock-color;
+}
+.steel-btn {
+  background-color: App.$steel-color;
+}
+.water-btn {
+  background-color: App.$water-color;
+}

@@ -1,0 +1,43 @@
+$img-panel-z-index: 5;
+$text-stroke: 0 0 2px black;
+
+@mixin text-style {
+  margin: 3vh;
+  z-index: $img-panel-z-index;
+
+  font-family: "Pokemon Solid";
+  letter-spacing: 4px;
+  color: #fff;
+  text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
+}
+
+.modal-img-panel {
+  position: relative;
+  flex: 1 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 300px;
+  @media (min-width: 1000px) {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  img {
+    z-index: $img-panel-z-index;
+    max-width: 35vh;
+    max-height: 35vh;
+  }
+
+  .pokemon-number {
+    @include text-style;
+    font-size: calc(22px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
+  }
+
+  .pokemon-name {
+    @include text-style;
+    font-size: calc(30px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
+    text-transform: capitalize;
+  }
+}

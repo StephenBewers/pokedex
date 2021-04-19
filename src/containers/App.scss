@@ -6,6 +6,8 @@
     url("../assets/fonts/Pokemon\ Solid.ttf") format("truetype");
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
 @mixin type-background($color, $image) {
   background: linear-gradient(rgba($color, 0.8), rgba($color, 0.8)), $image,
     $color;

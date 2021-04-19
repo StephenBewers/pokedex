@@ -28,7 +28,7 @@ const PokemonCard = ({ pokemon, clickHandler, getNumberWithLeadingZeros }) => {
         <span className="pokemon-number">
           {getNumberWithLeadingZeros(number, 3)}
         </span>
-        <img className="pokemon-img" src={image} alt={name} />
+        <img src={image} alt={name} />
         <span className="pokemon-name">{name}</span>
       </Tilt>
     </div>

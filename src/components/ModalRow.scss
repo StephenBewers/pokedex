@@ -1,0 +1,8 @@
+.modal-row {
+    display: flex;
+    flex-flow: row wrap;
+  
+    @media (max-width: 720px) {
+      flex-flow: column nowrap;
+    }
+  }

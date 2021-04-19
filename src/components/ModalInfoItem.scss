@@ -1,0 +1,65 @@
+.modal-info-item {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 0px 5vw 48px 0px;
+  }
+  
+  .modal-info-label {
+    display: inline-block;
+    color: #666;
+    font-size: 0.9em;
+    font-weight: 600;
+    padding-bottom: 0.3em;
+  }
+  
+  .modal-info-value {
+    font-size: 1.3em;
+    min-width: 66px;
+  
+    .modal-info-unit {
+      font-size: 0.9em;
+      padding-left: 0.4em;
+      align-self: center;
+  
+    }
+  }
+
+  #modal-habitat {
+    text-transform: capitalize;
+  }
+  
+  #modal-height {
+  }
+  
+  #modal-weight {
+  }
+  
+  #modal-catch-rate {
+  }
+  
+  #modal-abilities {
+  }
+  
+  #modal-strong-against {
+  }
+  
+  #modal-weak-against {
+  }
+  
+  #modal-base-stats {
+  }
+  
+  #modal-training {
+  }
+  
+  #modal-breeding {
+  }
+  
+  #modal-evolution {
+   // @include modal-info-section;
+  }
+  
+  #modal-variants {
+   // @include modal-info-section;
+  }
