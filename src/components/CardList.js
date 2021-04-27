@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import "./PokemonCardList.scss";
+import "./CardList.scss";
 import Modal from "./Modal";
 import PokemonCard from "./PokemonCard";
 
-class PokemonCardList extends Component {
+class CardList extends Component {
   constructor(props) {
     super(props);
     this.showModal = this.showModal.bind(this);
@@ -73,4 +73,4 @@ class PokemonCardList extends Component {
   }
 }
 
-export default PokemonCardList;
+export default CardList;

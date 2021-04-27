@@ -3,12 +3,19 @@ import "./Modal.scss";
 import PropTypes from "prop-types";
 import ModalExitBtn from "./ModalExitBtn.js";
 import ModalImagePanel from "./ModalImagePanel.js";
-import TypeBtn from "./TypeBtn";
 import ModalRow from "./ModalRow";
-import ModalDescription from "./ModalDescription";
 import ModalInfoItem from "./ModalInfoItem";
 import ModalInfoValue from "./ModalInfoValue";
+import ModalColumn from "./ModalColumn";
+import PokemonDescription from "./PokemonDescription";
+import PokemonTypeBtn from "./PokemonTypeBtn";
+import PokemonAbility from "./PokemonAbility";
 
+const Pokedex = require("pokeapi-js-wrapper");
+const customOptions = {
+  cacheImages: true,
+};
+const PokeApi = new Pokedex.Pokedex(customOptions);
 class Modal extends Component {
   static propTypes = {
     displayModal: PropTypes.bool,
@@ -17,19 +24,46 @@ class Modal extends Component {
     showModal: PropTypes.func,
     getNumberWithLeadingZeros: PropTypes.func,
   };
+  state = {
+    pokemon: this.props.pokemon,
+    abilitiesReceived: false,
+  };
 
   // Prevents clicks on the inner modal div triggering the outer modal click event
   innerModalClick(event) {
     event.stopPropagation();
   }
 
+  componentDidMount() {
+    this.getPokemonAbilityObjects(this.state.pokemon);
+  }
+
+  // Gets the pokemon ability objects from the API
+  getPokemonAbilityObjects = (pokemon) => {
+    if (pokemon.defaultVariant.abilities.length) {
+      try {
+        (async () => {
+          for (let i = 0; i < pokemon.defaultVariant.abilities.length; i++) {
+            const abilityObject = await PokeApi.resource(
+              `${pokemon.defaultVariant.abilities[i].ability.url}`
+            );
+            pokemon.defaultVariant.abilities[i].details = abilityObject;
+          }
+          this.setState({
+            pokemon: pokemon,
+            abilitiesReceived: true,
+          });
+        })();
+      } catch {
+        console.error(`Failed to get ability object`);
+      }
+    }
+  };
+
   render() {
-    const {
-      displayModal,
-      pokemon,
-      hideModal,
-      getNumberWithLeadingZeros,
-    } = this.props;
+    const { displayModal, hideModal, getNumberWithLeadingZeros } = this.props;
+
+    const pokemon = this.state.pokemon;
 
     // If the displayModal state becomes false, hide the modal
     const visibleClassName = displayModal ? "visible" : "hidden";
@@ -64,6 +98,26 @@ class Modal extends Component {
       return ((captureRate / 255) * 100).toFixed(2);
     };
 
+    // If the abilities have been received, returns the JSX to display them
+    const displayAbilities = () => {
+      if (this.state.abilitiesReceived) {
+        return (
+          <>
+            {abilities.map((ability, i) => {
+              return (
+                <PokemonAbility
+                  ability={ability}
+                  key={`ability-${i}`}
+                ></PokemonAbility>
+              );
+            })}
+          </>
+        );
+      } else {
+        return <span>Loading abilities...</span>;
+      }
+    };
+
     // Get pokemon information for display on the modal
     const types = pokemon.defaultVariant.types;
     const habitat = pokemon.habitat?.name;
@@ -77,8 +131,7 @@ class Modal extends Component {
     const weightInPounds = getWeightInPounds(weight);
     const captureRate = pokemon.capture_rate;
     const capturePercent = getCapturePercent(captureRate);
-
-    getHeightInMetres(height);
+    const abilities = pokemon.defaultVariant.abilities;
 
     return (
       <div className={`modal ${visibleClassName}`} onClick={hideModal}>
@@ -90,17 +143,17 @@ class Modal extends Component {
           />
           <div className="modal-info-panel">
             <ModalRow>
-              <ModalDescription pokemon={pokemon} />
+              <PokemonDescription pokemon={pokemon} />
             </ModalRow>
             <ModalRow>
               <ModalRow>
                 <ModalInfoItem label="Types" id="modal-types">
                   {types.map((type, i) => {
                     return (
-                      <TypeBtn
+                      <PokemonTypeBtn
                         type={type.type.name}
                         key={`type-btn-${i}`}
-                      ></TypeBtn>
+                      ></PokemonTypeBtn>
                     );
                   })}
                 </ModalInfoItem>
@@ -134,12 +187,24 @@ class Modal extends Component {
                 <ModalInfoItem label="Catch rate" id="modal-catch-rate">
                   <ModalInfoValue value={captureRate}></ModalInfoValue>
                   <ModalInfoValue
-                    value={capturePercent}
+                    value={`~ ${capturePercent}`}
                     unit="%"
                     alternative={true}
                   ></ModalInfoValue>
                 </ModalInfoItem>
               </ModalRow>
+            </ModalRow>
+            <ModalRow>
+              <ModalColumn>
+                <ModalRow>
+                  <ModalInfoItem
+                    label="Abilities"
+                    id="modal-abilities"
+                  >
+                    {displayAbilities()}
+                  </ModalInfoItem>
+                </ModalRow>
+              </ModalColumn>
             </ModalRow>
           </div>
         </section>

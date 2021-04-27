@@ -1,7 +1,7 @@
 import React from "react";
-import "./ModalDescription.scss";
+import "./PokemonDescription.scss";
 
-const ModalDescription = ({ pokemon }) => {
+const PokemonDescription = ({ pokemon }) => {
   // Gets the Omega-Ruby description in English
   const getDescriptionText = (descriptionsArray) => {
     let descriptionString = "";
@@ -18,7 +18,7 @@ const ModalDescription = ({ pokemon }) => {
 
   const description = getDescriptionText(pokemon.flavor_text_entries);
 
-  return <div id="modal-description">{description}</div>;
+  return <p id="pokemon-description">{description}</p>;
 };
 
-export default ModalDescription;
+export default PokemonDescription;

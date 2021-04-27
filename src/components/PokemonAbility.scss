@@ -1,0 +1,17 @@
+.pokemon-ability {
+    margin: 0.8em 0.5em 0em 0em;
+}
+
+.pokemon-ability summary {
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+.hidden-ability-label {
+    background-color: #ddd;
+    border-radius: 0.4em;
+    padding: 0.2em 0.5em;
+    margin: 0em 1em;
+    font-size: 0.8em;
+    text-transform: uppercase;
+}

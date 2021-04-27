@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.scss";
 import Header from "../components/Header.js";
 import InfiniteScroll from "react-infinite-scroll-component";
-import PokemonCardList from "../components/PokemonCardList.js";
+import CardList from "../components/CardList.js";
 
 const Pokedex = require("pokeapi-js-wrapper");
 const customOptions = {
@@ -235,7 +235,7 @@ class App extends Component {
               </div>
             }
           >
-            <PokemonCardList pokemonList={retrievedPokemon} />
+            <CardList pokemonList={retrievedPokemon} />
           </InfiniteScroll>
         </main>
       </>

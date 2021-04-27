@@ -1,5 +1,5 @@
 import React from "react";
-import "./TypeBtn.scss";
+import "./PokemonTypeBtn.scss";
 import bugIcon from "../assets/images/bug-icon.png";
 import darkIcon from "../assets/images/dark-icon.png";
 import dragonIcon from "../assets/images/dragon-icon.png";
@@ -19,7 +19,7 @@ import rockIcon from "../assets/images/rock-icon.png";
 import steelIcon from "../assets/images/steel-icon.png";
 import waterIcon from "../assets/images/water-icon.png";
 
-const TypeBtn = ({ type, modifier }) => {
+const PokemonTypeBtn = ({ type, modifier }) => {
   const getTypeIcon = (type) => {
     const typeIcons = {
       bug: bugIcon,
@@ -47,10 +47,10 @@ const TypeBtn = ({ type, modifier }) => {
   const typeIcon = getTypeIcon(type);
 
   return (
-    <span className={`modal-type-btn ${type}-btn`}>
+    <span className={`pokemon-type-btn ${type}-btn`}>
       <img src={`${typeIcon}`} alt=""></img> {type}
     </span>
   );
 };
 
-export default TypeBtn;
+export default PokemonTypeBtn;
