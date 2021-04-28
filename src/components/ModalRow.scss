@@ -6,3 +6,11 @@
       flex-flow: column nowrap;
     }
   }
+
+.modal-row > * {
+  margin-bottom: 4vmax;
+
+  @media (max-width: 720px) {
+    margin-bottom: 0vmax;
+  }
+}
