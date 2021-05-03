@@ -19,7 +19,7 @@
 
   content: "";
   position: absolute;
-  z-index: 1;
+  transform: translateZ(1px);
   top: 0;
   left: 0;
   width: 100%;
@@ -33,7 +33,7 @@
 $bug-color: #829e17;
 $dark-color: #1c262b;
 $dragon-color: #421aa3;
-$electric-color: #e9bf0b;
+$electric-color: #d3c613;
 $fairy-color: #fb6883;
 $fighting-color: #a4241e;
 $fire-color: #ff8202;

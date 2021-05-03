@@ -1,7 +1,13 @@
 #pokemon-description {
-    font-size: 1.25em;
-    text-align: left;
-    @media (max-width: 720px) {
-      margin-bottom: 6vmax;
-    }
+  font-size: 1.2em;
+  text-align: left;
+  margin-block-end: 0em;
+  margin-bottom: 2vmax;
+
+  @media (max-width: 1200px) {
+    margin-bottom: 3vmax;
   }
+  @media (max-width: 720px) {
+    margin-bottom: 5vmax;
+  }
+}

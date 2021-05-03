@@ -1,8 +1,8 @@
 import React from "react";
 import "./ModalRow.scss";
 
-const ModalRow = ({ children }) => {
-  return <div className="modal-row">{children}</div>;
+const ModalRow = ({ id, children }) => {
+  return <div className="modal-row" id={id}>{children}</div>;
 };
 
 export default ModalRow;

@@ -12,7 +12,7 @@ $border-radius: 8px;
 
 .glare-wrapper {
   border-radius: $border-radius;
-  z-index: 5;
+  transform: translateZ(2px);
 }
 
 .pokemon-card {
@@ -40,7 +40,7 @@ $border-radius: 8px;
   .pokemon-number {
     @include text-style;
     font-size: calc(14px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
-    z-index: 5;
+    transform: translateZ(3px);
     margin-top: 0.33vh;
   }
 
@@ -48,7 +48,7 @@ $border-radius: 8px;
     @include text-style;
     font-size: calc(14px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
     text-transform: capitalize;
-    z-index: 5;
+    transform: translateZ(3px);
     margin-bottom: 0.66vh;
   }
 }

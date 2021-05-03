@@ -1,16 +1,40 @@
-.modal-row {
-    display: flex;
-    flex-flow: row wrap;
-  
-    @media (max-width: 720px) {
-      flex-flow: column nowrap;
-    }
-  }
+$border-style: 1px solid #ddd;
 
-.modal-row > * {
-  margin-bottom: 4vmax;
+.modal-row {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 2vmax 0vmax;
 
   @media (max-width: 720px) {
-    margin-bottom: 0vmax;
+    flex-flow: column nowrap;
   }
+}
+
+.modal-row > .modal-row {
+  padding: 0vmax 0vmax 2vmax 0vmax;
+
+  @media (max-width: 720px) {
+    padding: 0;
+  }
+}
+
+.modal-column > .modal-row {
+  padding: 0vmax 0vmax 2vmax 0vmax;
+}
+
+.modal-info-item > .modal-row {
+  padding: 0;
+}
+
+#modal-top-row {
+  border-top: $border-style;
+
+  @media (min-width: 720px) {
+    padding: 2vmax 0vmax 0vmax 0vmax;
+  }
+}
+
+#modal-centre-section {
+  border-top: $border-style;
+  border-bottom: $border-style;
 }

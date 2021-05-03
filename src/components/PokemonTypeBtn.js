@@ -19,7 +19,7 @@ import rockIcon from "../assets/images/rock-icon.png";
 import steelIcon from "../assets/images/steel-icon.png";
 import waterIcon from "../assets/images/water-icon.png";
 
-const PokemonTypeBtn = ({ type, modifier }) => {
+const PokemonTypeBtn = ({ type, effect }) => {
   const getTypeIcon = (type) => {
     const typeIcons = {
       bug: bugIcon,
@@ -41,14 +41,29 @@ const PokemonTypeBtn = ({ type, modifier }) => {
       steel: steelIcon,
       water: waterIcon,
     };
-    return typeIcons[type] || typeIcons["normal"];
+    return typeIcons[type] || undefined;
   };
 
   const typeIcon = getTypeIcon(type);
 
+  // If the type has an icon, render the icon UI
+  const renderTypeIcon = (typeIcon) => {
+    if (typeIcon !== undefined) {
+      return <img src={`${typeIcon}`} alt=""></img>
+    }
+  }
+
+  // If the effect prop has been passed render the type effect UI
+  const renderTypeEffect = (effect) => {
+    if (effect) {
+      return <span className={"type-effect"}>&times;{effect}</span>
+    }
+  }
+
   return (
     <span className={`pokemon-type-btn ${type}-btn`}>
-      <img src={`${typeIcon}`} alt=""></img> {type}
+      {renderTypeIcon(typeIcon)} {type}
+      {renderTypeEffect(effect)}
     </span>
   );
 };

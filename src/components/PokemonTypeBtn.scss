@@ -1,15 +1,14 @@
 @use '../containers/App';
 
 .pokemon-type-btn {
-  width: 7em;
   margin: 0.5em 0.5em 0em 0em;
-  padding: 6px;
+  padding: 6px 11px 6px 6px;
   color: #fff;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   text-transform: uppercase;
-  font-size: 0.8em;
+  font-size: 0.75em;
   font-weight: bold;
   border-radius: 8px;
 
@@ -25,6 +24,30 @@
     height: 20px;
     object-fit: none;
     margin-right: 0.5em;
+  }
+
+  .type-effect {
+    width: 2.2em;
+    height: 2.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.75em;
+    background-color: #fff;
+    color: #444;
+    padding: 3px;
+    border-radius: 4.4em;
+  }
+}
+
+.none-btn {
+  background-color: #666666;
+  padding: 8px 16px;
+  cursor: auto;
+
+  &:hover {
+    box-shadow: none;
+    transition: none;
   }
 }
 
