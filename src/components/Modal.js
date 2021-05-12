@@ -206,7 +206,7 @@ class Modal extends Component {
     // If the abilities have been received, returns the JSX to display them
     const displayTypeEffectiveness = (
       types,
-      effectDescription,
+      effectivenessDescription,
       typesReceived
     ) => {
       if (typesReceived) {
@@ -215,8 +215,8 @@ class Modal extends Component {
           typeBtns.push(
             <PokemonTypeBtn
               type={types[i][0]}
-              effect={types[i][1]}
-              key={`${effectDescription}-type-btn-${i}`}
+              effectiveness={types[i][1]}
+              key={`${effectivenessDescription}-type-btn-${i}`}
             ></PokemonTypeBtn>
           );
         }
@@ -224,7 +224,7 @@ class Modal extends Component {
           typeBtns.push(
             <PokemonTypeBtn
               type={"none"}
-              key={`${effectDescription}-type-btn-0`}
+              key={`${effectivenessDescription}-type-btn-0`}
             ></PokemonTypeBtn>
           );
         }
@@ -248,26 +248,29 @@ class Modal extends Component {
     const captureRate = pokemon.capture_rate;
     const capturePercent = getCapturePercent(captureRate);
     const abilities = pokemon.defaultVariant.abilities;
+    const baseExperience = pokemon.defaultVariant.base_experience;
+    const baseFriendship = pokemon.base_happiness;
+    const growthRate = pokemon.growth_rate.name;
+
+    // Get the weak, resistant and immune types
     let weakTypes = {};
     let normalTypes = {};
     let resistantTypes = {};
     let immuneTypes = {};
-
-    // Get the weak, resistant and immune types
     if (typesReceived) {
       const typeEffectivenessArray = Object.entries(typeEffectiveness);
       weakTypes = typeEffectivenessArray
-        .filter(([key, value]) => value > 1)
-        .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1]));
+        .filter(([key, value]) => value > 1) // Get the types where the effectiveness is greater than 1
+        .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1]));  // Sort the types, highest effectiveness first
       normalTypes = typeEffectivenessArray.filter(
         ([key, value]) => value === 1
-      );
+      ); // Get the types where the effectiveness is 1
       resistantTypes = typeEffectivenessArray
-        .filter(([key, value]) => value < 1 && value !== 0)
-        .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1]));
+        .filter(([key, value]) => value < 1 && value !== 0)  // Get the types where the effectiveness is less than 1 but not 0
+        .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1])); // Sort the types, highest effectiveness first
       immuneTypes = typeEffectivenessArray.filter(
         ([key, value]) => value === 0
-      );
+      ); // Get the types where the effectiveness is 0
     }
 
     return (
@@ -282,7 +285,12 @@ class Modal extends Component {
             <PokemonDescription pokemon={pokemon} />
             <ModalRow id="modal-top-row">
               <ModalRow>
-                <ModalInfoItem label="Types" id="modal-types" row={true}>
+                <ModalInfoItem
+                  label="Types"
+                  id="modal-types"
+                  row={true}
+                  subitem={true}
+                >
                   {types.map((type, i) => {
                     return (
                       <PokemonTypeBtn
@@ -292,12 +300,16 @@ class Modal extends Component {
                     );
                   })}
                 </ModalInfoItem>
-                <ModalInfoItem label="Habitat" id="modal-habitat">
+                <ModalInfoItem
+                  label="Habitat"
+                  id="modal-habitat"
+                  subitem={true}
+                >
                   <ModalInfoValue value={habitat}></ModalInfoValue>
                 </ModalInfoItem>
               </ModalRow>
               <ModalRow>
-                <ModalInfoItem label="Height" id="modal-height">
+                <ModalInfoItem label="Height" id="modal-height" subitem={true}>
                   <ModalInfoValue
                     value={heightInMetres}
                     unit="m"
@@ -308,7 +320,7 @@ class Modal extends Component {
                     alternative={true}
                   ></ModalInfoValue>
                 </ModalInfoItem>
-                <ModalInfoItem label="Weight" id="modal-weight">
+                <ModalInfoItem label="Weight" id="modal-weight" subitem={true}>
                   <ModalInfoValue
                     value={weightInKilos}
                     unit="kg"
@@ -319,7 +331,11 @@ class Modal extends Component {
                     alternative={true}
                   ></ModalInfoValue>
                 </ModalInfoItem>
-                <ModalInfoItem label="Catch rate" id="modal-catch-rate">
+                <ModalInfoItem
+                  label="Catch rate"
+                  id="modal-catch-rate"
+                  subitem={true}
+                >
                   <ModalInfoValue value={captureRate}></ModalInfoValue>
                   <ModalInfoValue
                     value={`~ ${capturePercent}`}
@@ -331,9 +347,36 @@ class Modal extends Component {
             </ModalRow>
             <ModalRow id="modal-centre-section">
               <ModalColumn>
-                <ModalRow>
+              <ModalRow>
                   <ModalInfoItem label="Abilities" id="modal-abilities">
                     {displayAbilities(abilities, abilitiesReceived)}
+                  </ModalInfoItem>
+                </ModalRow>
+                <ModalRow>
+                  <ModalInfoItem label="Training" id="modal-training">
+                    <ModalRow>
+                      <ModalInfoItem
+                        label="Base Experience"
+                        id="modal-base-exp"
+                        subitem={true}
+                      >
+                        <ModalInfoValue value={baseExperience}></ModalInfoValue>
+                      </ModalInfoItem>
+                      <ModalInfoItem
+                        label="Base Friendship"
+                        id="modal-base-friendship"
+                        subitem={true}
+                      >
+                        <ModalInfoValue value={baseFriendship}></ModalInfoValue>
+                      </ModalInfoItem>
+                      <ModalInfoItem
+                        label="Growth rate"
+                        id="modal-growth-rate"
+                        subitem={true}
+                      >
+                        <ModalInfoValue value={growthRate}></ModalInfoValue>
+                      </ModalInfoItem>
+                    </ModalRow>
                   </ModalInfoItem>
                 </ModalRow>
               </ModalColumn>

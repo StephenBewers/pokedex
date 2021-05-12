@@ -26,7 +26,7 @@ $border-style: 1px solid #ddd;
   padding: 0;
 }
 
-#modal-top-row {
+#modal-top-row, #modal-training {
   border-top: $border-style;
 
   @media (min-width: 720px) {

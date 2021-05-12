@@ -1,16 +1,22 @@
 @use '../containers/App';
 
+$text-stroke: 0 0 3px black;
+
 .pokemon-type-btn {
+  height: 2.4em;
   margin: 0.5em 0.5em 0em 0em;
-  padding: 6px 11px 6px 6px;
+  padding: 6px;
+  padding-right: 20px;
   color: #fff;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   text-transform: uppercase;
   font-size: 0.75em;
-  font-weight: bold;
+  font-weight: 900;
   border-radius: 8px;
+
+  text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
 
   cursor: pointer;
   transition: box-shadow 0.1s ease-in-out;
@@ -25,8 +31,14 @@
     object-fit: none;
     margin-right: 0.5em;
   }
+}
 
-  .type-effect {
+.pokemon-effectiveness-btn {
+  @extend .pokemon-type-btn;
+  height: auto;
+  padding-right: 12px;
+
+  .type-effectiveness {
     width: 2.2em;
     height: 2.2em;
     display: flex;
@@ -37,6 +49,7 @@
     color: #444;
     padding: 3px;
     border-radius: 4.4em;
+    text-shadow: none;
   }
 }
 
