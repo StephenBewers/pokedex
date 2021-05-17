@@ -1,6 +1,7 @@
 .modal-info-item {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   text-align: left;
   margin-right: 1vw;
 
@@ -8,7 +9,7 @@
     margin: 1vmax 5vw 1vmax 0vw;
   }
   @media (max-width: 720px) {
-    margin: 3vmax 5vw 3vmax 0vw;
+    margin: 2vmax 5vw 2vmax 0vw;
   }
 }
 
@@ -20,12 +21,13 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  padding-top: 0.6em;
 }
 
 .modal-info-subitem {
   @extend .modal-info-item;
   @media (min-width: 1200px) {
-    margin: 1vmax 2vw 1vmax 0vw;
+    margin: 1vmax 2vw 0vmax 0vw;
   }
 }
 
@@ -34,15 +36,22 @@
   color: #666;
   font-size: 1.2em;
   font-weight: normal;
-  padding-bottom: 0.3em;
+  @media (max-width: 1200px) {
+    margin-bottom: 1vmax;
+  }
 }
 
 .modal-info-sublabel {
   @extend .modal-info-label;
   font-size: 0.9em;
   font-weight: bold;
+  @media (max-width: 1200px) {
+    margin-bottom: 0vmax;
+  }
 }
 
-#modal-habitat, #modal-growth-rate .modal-info-value {
-  text-transform: capitalize;
+#modal-abilities .modal-info-item {
+  @media (max-width: 1200px) {
+    padding-bottom: 1vmax;
+  }
 }

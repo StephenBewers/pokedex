@@ -143,12 +143,8 @@ class Modal extends Component {
   render() {
     const { displayModal, hideModal, getNumberWithLeadingZeros } = this.props;
 
-    const {
-      pokemon,
-      abilitiesReceived,
-      typeEffectiveness,
-      typesReceived,
-    } = this.state;
+    const { pokemon, abilitiesReceived, typeEffectiveness, typesReceived } =
+      this.state;
 
     // If the displayModal state becomes false, hide the modal
     const visibleClassName = displayModal ? "visible" : "hidden";
@@ -183,27 +179,17 @@ class Modal extends Component {
       return ((captureRate / 255) * 100).toFixed(2);
     };
 
-    // If the abilities have been received, returns the JSX to display them
-    const displayAbilities = (abilities, abilitiesReceived) => {
-      if (abilitiesReceived) {
-        return (
-          <>
-            {abilities.map((ability, i) => {
-              return (
-                <PokemonAbility
-                  ability={ability}
-                  key={`ability-${i}`}
-                ></PokemonAbility>
-              );
-            })}
-          </>
-        );
-      } else {
-        return <span>Loading abilities...</span>;
-      }
-    };
+    // Get the female gender percentage
+    const getFemalePercent = (genderRate) => {
+      return ((genderRate / 8) * 100).toFixed(1);
+    }
 
-    // If the abilities have been received, returns the JSX to display them
+    // Get the male gender percentage
+    const getMalePercent = (femalePercent) => {
+      return (100 - femalePercent).toFixed(1);
+    }
+
+    // If the type details have been received, returns the JSX to display the type effectiveness buttons
     const displayTypeEffectiveness = (
       types,
       effectivenessDescription,
@@ -251,6 +237,10 @@ class Modal extends Component {
     const baseExperience = pokemon.defaultVariant.base_experience;
     const baseFriendship = pokemon.base_happiness;
     const growthRate = pokemon.growth_rate.name;
+    const genderRate = pokemon.gender_rate;
+    const femalePercent = getFemalePercent(genderRate);
+    const malePercent = getMalePercent(femalePercent);
+    const eggGroups = pokemon.egg_groups;
 
     // Get the weak, resistant and immune types
     let weakTypes = {};
@@ -261,12 +251,12 @@ class Modal extends Component {
       const typeEffectivenessArray = Object.entries(typeEffectiveness);
       weakTypes = typeEffectivenessArray
         .filter(([key, value]) => value > 1) // Get the types where the effectiveness is greater than 1
-        .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1]));  // Sort the types, highest effectiveness first
+        .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1])); // Sort the types, highest effectiveness first
       normalTypes = typeEffectivenessArray.filter(
         ([key, value]) => value === 1
       ); // Get the types where the effectiveness is 1
       resistantTypes = typeEffectivenessArray
-        .filter(([key, value]) => value < 1 && value !== 0)  // Get the types where the effectiveness is less than 1 but not 0
+        .filter(([key, value]) => value < 1 && value !== 0) // Get the types where the effectiveness is less than 1 but not 0
         .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1])); // Sort the types, highest effectiveness first
       immuneTypes = typeEffectivenessArray.filter(
         ([key, value]) => value === 0
@@ -347,13 +337,21 @@ class Modal extends Component {
             </ModalRow>
             <ModalRow id="modal-centre-section">
               <ModalColumn>
-              <ModalRow>
-                  <ModalInfoItem label="Abilities" id="modal-abilities">
-                    {displayAbilities(abilities, abilitiesReceived)}
+                <ModalRow id="modal-abilities">
+                  <ModalInfoItem label="Abilities">
+                    {abilities.map((ability, i) => {
+                      return (
+                        <PokemonAbility
+                          ability={ability}
+                          detailsReceived={abilitiesReceived}
+                          key={`ability-${i}`}
+                        ></PokemonAbility>
+                      );
+                    })}
                   </ModalInfoItem>
                 </ModalRow>
-                <ModalRow>
-                  <ModalInfoItem label="Training" id="modal-training">
+                <ModalRow id="modal-training">
+                  <ModalInfoItem label="Training">
                     <ModalRow>
                       <ModalInfoItem
                         label="Base Experience"
@@ -379,6 +377,41 @@ class Modal extends Component {
                     </ModalRow>
                   </ModalInfoItem>
                 </ModalRow>
+                <ModalRow id="modal-breeding">
+                  <ModalInfoItem label="Breeding">
+                    <ModalRow>
+                      <ModalInfoItem
+                        label="Gender"
+                        id="modal-gender"
+                        subitem={true}
+                        row={true}
+                      >
+                        <ModalInfoValue
+                          value={`\u2640 ${femalePercent}`}
+                          unit="%"
+                        ></ModalInfoValue>
+                        <ModalInfoValue
+                          value={`\u2642 ${malePercent}`}
+                          unit="%"
+                        ></ModalInfoValue>
+                      </ModalInfoItem>
+                      <ModalInfoItem
+                        label="Egg groups"
+                        id="modal-egg-groups"
+                        subitem={true}
+                      >
+                        {eggGroups.map((eggGroup, i) => {
+                          return (
+                            <ModalInfoValue
+                              value={eggGroup.name}
+                              key={eggGroup.name}
+                            ></ModalInfoValue>
+                          );
+                        })}
+                      </ModalInfoItem>
+                    </ModalRow>
+                  </ModalInfoItem>
+                </ModalRow>
               </ModalColumn>
               <ModalColumn id="modal-right-column">
                 <ModalRow>
@@ -387,8 +420,8 @@ class Modal extends Component {
                     id="modal-type-effectiveness"
                   >
                     <p>
-                      The effectiveness of move types on this pokémon in normal
-                      battle conditions.
+                      The effectiveness of move types on this pokémon under
+                      normal battle conditions.
                     </p>
                     <ModalRow>
                       <ModalInfoItem

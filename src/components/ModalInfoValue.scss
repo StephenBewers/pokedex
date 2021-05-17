@@ -1,23 +1,44 @@
+$value-padding: 0.6em;
+$value-half-padding: 0.3em;
+
 .modal-info-value {
   font-size: 1.2em;
   min-width: 66px;
-
-  .modal-info-unit {
-    font-size: 0.9em;
-    padding-left: 0.4em;
-    align-self: center;
-  }
+  padding-top: $value-padding;
+  padding-bottom: $value-half-padding;
+  text-transform: capitalize;
 }
 
 .modal-info-alternative-value {
-  margin-top: 0.3em;
+  min-width: 66px;
   font-size: 1em;
   color: #666;
-  min-width: 66px;
+}
 
-  .modal-info-alternative-unit {
-    font-size: 0.8em;
-    padding-left: 0.4em;
-    align-self: center;
-  }
+.modal-info-unit {
+  font-size: 0.9em;
+  padding-left: 0.4em;
+  align-self: center;
+}
+
+.modal-info-alternative-unit {
+  @extend .modal-info-unit;
+  font-size: 0.8em;
+}
+
+.modal-info-values-row .modal-info-value {
+  padding-right: 1.2em;
+  padding-top: 0;
+}
+
+.modal-info-value + .modal-info-value {
+  padding-top: 0;
+}
+
+.modal-info-value:last-child {
+  padding-bottom: 0;
+}
+
+#modal-types .modal-info-values-row {
+  padding-top: $value-padding;
 }

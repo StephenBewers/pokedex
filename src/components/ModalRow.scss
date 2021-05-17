@@ -1,9 +1,10 @@
 $border-style: 1px solid #ddd;
+$padding-constant: 1.4vmax;
 
 .modal-row {
   display: flex;
   flex-flow: row wrap;
-  padding: 2vmax 0vmax;
+  padding: $padding-constant 0vmax;
 
   @media (max-width: 720px) {
     flex-flow: column nowrap;
@@ -11,7 +12,7 @@ $border-style: 1px solid #ddd;
 }
 
 .modal-row > .modal-row {
-  padding: 0vmax 0vmax 2vmax 0vmax;
+  padding: 0vmax 0vmax $padding-constant 0vmax;
 
   @media (max-width: 720px) {
     padding: 0;
@@ -19,22 +20,42 @@ $border-style: 1px solid #ddd;
 }
 
 .modal-column > .modal-row {
-  padding: 0vmax 0vmax 2vmax 0vmax;
+  @media (min-width: 720px) {
+    padding: $padding-constant 0vmax;
+  }
+}
+
+.modal-column .modal-row:first-child {
+  @media (min-width: 720px) {
+    padding: 0vmax 0vmax $padding-constant 0vmax;
+  }
 }
 
 .modal-info-item > .modal-row {
   padding: 0;
 }
 
-#modal-top-row, #modal-training {
+#modal-top-row {
   border-top: $border-style;
-
-  @media (min-width: 720px) {
-    padding: 2vmax 0vmax 0vmax 0vmax;
-  }
 }
 
 #modal-centre-section {
   border-top: $border-style;
   border-bottom: $border-style;
+  padding-top: $padding-constant;
+  @media (max-width: 720px) {
+    padding: 0;
+  }
+}
+
+#modal-training, #modal-breeding {
+  border-top: $border-style;
+}
+
+#modal-type-effectiveness .modal-row {
+  padding: 0vmax 0vmax $padding-constant 0vmax;
+
+  @media (max-width: 720px) {
+    padding: 0;
+  }
 }

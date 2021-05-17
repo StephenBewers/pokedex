@@ -2,6 +2,10 @@
     margin: 0.8em 0.5em 0em 0em;
 }
 
+.pokemon-ability:last-child {
+    padding-bottom: 0.3em;
+}
+
 .pokemon-ability summary {
     font-size: 1.1em;
     text-transform: capitalize;

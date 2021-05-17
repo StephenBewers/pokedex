@@ -1,14 +1,17 @@
 @use './ModalRow.scss';
 
 .modal-column {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 0;
-  }
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+}
 
-  #modal-right-column {
-    @media (min-width: 720px) {
-      padding-left: 3vmax;
-      border-left: ModalRow.$border-style;
-    }
+#modal-right-column {
+  @media (min-width: 720px) {
+    padding-left: 3vmax;
+    border-left: ModalRow.$border-style;
   }
+  @media (max-width: 720px) {
+    border-top: ModalRow.$border-style;
+  }
+}
