@@ -1,0 +1,46 @@
+@use './ModalInfoItem.scss';
+
+.pokemon-stat-table caption {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    text-align: left;
+}
+
+th, td {
+    padding: 0.25em 1.75em 0.25em 0em;
+}
+
+th.modal-info-sublabel {
+    display: table-cell;
+    padding-bottom: 0.5em;
+}
+
+td.stat-name {
+    text-transform: capitalize;
+}
+
+td.hp {
+    text-transform: uppercase;
+}
+
+td.stat-value {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+tfoot td {
+    padding-top: 0.5em;
+    font-weight: bold;
+}
+
+.stat-bar-outer {
+    margin-left: 2em;
+}
+
+.stat-bar-inner {
+    display: inline-block;
+    height: 0.5em;
+    border-radius: 12px;
+    background-color: #5252FF;
+}

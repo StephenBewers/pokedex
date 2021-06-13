@@ -1,5 +1,6 @@
 $border-style: 1px solid #ddd;
 $padding-constant: 1.4vmax;
+$double-padding-constant: 2vmax;
 
 .modal-row {
   display: flex;
@@ -21,13 +22,13 @@ $padding-constant: 1.4vmax;
 
 .modal-column > .modal-row {
   @media (min-width: 720px) {
-    padding: $padding-constant 0vmax;
+    padding: $double-padding-constant 0vmax;
   }
 }
 
 .modal-column .modal-row:first-child {
   @media (min-width: 720px) {
-    padding: 0vmax 0vmax $padding-constant 0vmax;
+    padding: 0vmax 0vmax $double-padding-constant 0vmax;
   }
 }
 
@@ -42,13 +43,14 @@ $padding-constant: 1.4vmax;
 #modal-centre-section {
   border-top: $border-style;
   border-bottom: $border-style;
-  padding-top: $padding-constant;
+  padding-top: $double-padding-constant;
+  padding-bottom: 5vmax;
   @media (max-width: 720px) {
     padding: 0;
   }
 }
 
-#modal-training, #modal-breeding {
+#modal-training, #modal-breeding, #modal-abilities {
   border-top: $border-style;
 }
 

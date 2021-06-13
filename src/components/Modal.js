@@ -10,6 +10,7 @@ import ModalColumn from "./ModalColumn";
 import PokemonDescription from "./PokemonDescription";
 import PokemonTypeBtn from "./PokemonTypeBtn";
 import PokemonAbility from "./PokemonAbility";
+import PokemonStatTable from "./PokemonStatTable";
 
 const Pokedex = require("pokeapi-js-wrapper");
 const customOptions = {
@@ -221,6 +222,7 @@ class Modal extends Component {
     };
 
     // Get pokemon information for display on the modal
+    const name = pokemon.name;
     const types = pokemon.defaultVariant.types;
     const habitat = pokemon.habitat?.name;
     const height = pokemon.defaultVariant.height;
@@ -233,6 +235,7 @@ class Modal extends Component {
     const weightInPounds = getWeightInPounds(weight);
     const captureRate = pokemon.capture_rate;
     const capturePercent = getCapturePercent(captureRate);
+    const baseStats = pokemon.defaultVariant.stats;
     const abilities = pokemon.defaultVariant.abilities;
     const baseExperience = pokemon.defaultVariant.base_experience;
     const baseFriendship = pokemon.base_happiness;
@@ -337,6 +340,11 @@ class Modal extends Component {
             </ModalRow>
             <ModalRow id="modal-centre-section">
               <ModalColumn>
+              <ModalRow id="modal-base-stats">
+                  <ModalInfoItem label="Base stats">
+                    <PokemonStatTable stats={baseStats}></PokemonStatTable>
+                  </ModalInfoItem>
+                </ModalRow>
                 <ModalRow id="modal-abilities">
                   <ModalInfoItem label="Abilities">
                     {abilities.map((ability, i) => {
