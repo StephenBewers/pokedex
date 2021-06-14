@@ -2,13 +2,18 @@ import React from "react";
 import Tilt from "react-parallax-tilt";
 import "./PokemonCard.scss";
 
-const PokemonCard = ({ pokemon, clickHandler, getNumberWithLeadingZeros }) => {
+const PokemonCard = ({
+  species,
+  variant,
+  showNumber,
+  clickHandler,
+  getNumberWithLeadingZeros,
+}) => {
   // Get pokemon information for display on the card
-  const number = pokemon.pokedex_numbers[0].entry_number;
-  const name = pokemon.name;
-  const types = pokemon.defaultVariant.types;
-  const image =
-    pokemon.defaultVariant.sprites.other["official-artwork"].front_default;
+  const number = species.pokedex_numbers[0].entry_number;
+  const name = variant.name;
+  const types = variant.types;
+  const image = variant.sprites.other["official-artwork"].front_default;
 
   const primaryTypeClass = `${types[0].type.name}-type`;
 
@@ -16,8 +21,11 @@ const PokemonCard = ({ pokemon, clickHandler, getNumberWithLeadingZeros }) => {
   const secondaryTypeClass =
     types.length > 1 ? `${types[1].type.name}-secondary` : "";
 
+  // If showNumber is true, render the number
+  const numberClass = showNumber ? "pokemon-number" : "hidden-number";
+
   return (
-    <div role="button" onClick={clickHandler.bind(this, pokemon)}>
+    <div role="button" onClick={clickHandler.bind(this, {species:species, variant:variant})}>
       <Tilt
         className={`pokemon-card ${primaryTypeClass} ${secondaryTypeClass}`}
         perspective={500}
@@ -25,9 +33,9 @@ const PokemonCard = ({ pokemon, clickHandler, getNumberWithLeadingZeros }) => {
         glareMaxOpacity={0.45}
         scale={1.02}
       >
-        <span className="pokemon-number">
-          {getNumberWithLeadingZeros(number, 3)}
-        </span>
+            <span className={`${numberClass}`}>
+              {getNumberWithLeadingZeros(number, 3)}
+            </span>
         <img src={image} alt={name} />
         <span className="pokemon-name">{name}</span>
       </Tilt>

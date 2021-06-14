@@ -44,7 +44,6 @@ $double-padding-constant: 2vmax;
   border-top: $border-style;
   border-bottom: $border-style;
   padding-top: $double-padding-constant;
-  padding-bottom: 5vmax;
   @media (max-width: 720px) {
     padding: 0;
   }

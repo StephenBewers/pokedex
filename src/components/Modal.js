@@ -11,6 +11,7 @@ import PokemonDescription from "./PokemonDescription";
 import PokemonTypeBtn from "./PokemonTypeBtn";
 import PokemonAbility from "./PokemonAbility";
 import PokemonStatTable from "./PokemonStatTable";
+import CardList from "./CardList";
 
 const Pokedex = require("pokeapi-js-wrapper");
 const customOptions = {
@@ -21,15 +22,17 @@ const defaultTypeEffectiveness = 1;
 class Modal extends Component {
   static propTypes = {
     displayModal: PropTypes.bool,
-    pokemon: PropTypes.object.isRequired,
+    species: PropTypes.object.isRequired,
+    variant: PropTypes.object.isRequired,
     hideModal: PropTypes.func,
-    showModal: PropTypes.func,
     getNumberWithLeadingZeros: PropTypes.func,
   };
   state = {
-    pokemon: this.props.pokemon,
+    species: this.props.species,
+    variant: this.props.variant,
     abilitiesReceived: false,
     typesReceived: false,
+    otherVariants: [],
     typeEffectiveness: {
       bug: defaultTypeEffectiveness,
       dark: defaultTypeEffectiveness,
@@ -58,23 +61,24 @@ class Modal extends Component {
   }
 
   componentDidMount() {
-    this.getPokemonAbilityObjects(this.state.pokemon);
-    this.getPokemonTypeObjects(this.state.pokemon);
+    this.getPokemonAbilityObjects(this.state.variant);
+    this.getPokemonTypeObjects(this.state.variant);
+    this.getOtherVariants(this.state.species, this.state.variant);
   }
 
   // Gets the pokemon ability objects from the API
-  getPokemonAbilityObjects = (pokemon) => {
-    if (pokemon.defaultVariant.abilities.length) {
+  getPokemonAbilityObjects = (variant) => {
+    if (variant.abilities.length) {
       try {
         (async () => {
-          for (let i = 0; i < pokemon.defaultVariant.abilities.length; i++) {
+          for (let i = 0; i < variant.abilities.length; i++) {
             const abilityObject = await PokeApi.resource(
-              `${pokemon.defaultVariant.abilities[i].ability.url}`
+              `${variant.abilities[i].ability.url}`
             );
-            pokemon.defaultVariant.abilities[i].details = abilityObject;
+            variant.abilities[i].details = abilityObject;
           }
           this.setState({
-            pokemon: pokemon,
+            variant: variant,
             abilitiesReceived: true,
           });
         })();
@@ -114,25 +118,50 @@ class Modal extends Component {
   };
 
   // Gets the pokemon type objects from the API
-  getPokemonTypeObjects = (pokemon) => {
+  getPokemonTypeObjects = (variant) => {
     let { typeEffectiveness } = this.state;
-    if (pokemon.defaultVariant.types.length) {
+    if (variant.types.length) {
       try {
         (async () => {
-          for (let i = 0; i < pokemon.defaultVariant.types.length; i++) {
+          for (let i = 0; i < variant.types.length; i++) {
             const typeObject = await PokeApi.resource(
-              `${pokemon.defaultVariant.types[i].type.url}`
+              `${variant.types[i].type.url}`
             );
-            pokemon.defaultVariant.types[i].details = typeObject;
+            variant.types[i].details = typeObject;
             typeEffectiveness = this.calculateTypeEffectiveness(
               typeObject,
               typeEffectiveness
             );
           }
           this.setState({
-            pokemon: pokemon,
+            variant: variant,
             typeEffectiveness: typeEffectiveness,
             typesReceived: true,
+          });
+        })();
+      } catch {
+        console.error(`Failed to get type object`);
+      }
+    }
+  };
+
+  // Gets the other variants of this pokemon species from the API
+  getOtherVariants = (species, currentVariant) => {
+    const otherVariantsToGet = species.varieties.filter(
+      (variant) => variant.pokemon.name !== currentVariant.name
+    );
+    let otherVariants = [];
+    if (otherVariantsToGet.length) {
+      try {
+        (async () => {
+          for (let i = 0; i < otherVariantsToGet.length; i++) {
+            const variantObject = await PokeApi.resource(
+              otherVariantsToGet[i].pokemon.url
+            );
+            otherVariants[i] = variantObject;
+          }
+          this.setState({
+            otherVariants: otherVariants,
           });
         })();
       } catch {
@@ -144,8 +173,14 @@ class Modal extends Component {
   render() {
     const { displayModal, hideModal, getNumberWithLeadingZeros } = this.props;
 
-    const { pokemon, abilitiesReceived, typeEffectiveness, typesReceived } =
-      this.state;
+    const {
+      species,
+      variant,
+      abilitiesReceived,
+      typeEffectiveness,
+      typesReceived,
+      otherVariants,
+    } = this.state;
 
     // If the displayModal state becomes false, hide the modal
     const visibleClassName = displayModal ? "visible" : "hidden";
@@ -183,12 +218,12 @@ class Modal extends Component {
     // Get the female gender percentage
     const getFemalePercent = (genderRate) => {
       return ((genderRate / 8) * 100).toFixed(1);
-    }
+    };
 
     // Get the male gender percentage
     const getMalePercent = (femalePercent) => {
       return (100 - femalePercent).toFixed(1);
-    }
+    };
 
     // If the type details have been received, returns the JSX to display the type effectiveness buttons
     const displayTypeEffectiveness = (
@@ -222,28 +257,52 @@ class Modal extends Component {
     };
 
     // Get pokemon information for display on the modal
-    const name = pokemon.name;
-    const types = pokemon.defaultVariant.types;
-    const habitat = pokemon.habitat?.name;
-    const height = pokemon.defaultVariant.height;
+    const types = variant.types;
+    const habitat = species.habitat?.name;
+    const height = variant.height;
     const heightInMetres = getHeightInMetres(height);
     const heightInFeetInches = `${parseInt(
       getHeightInFeet(height)
     )}' ${parseInt(getHeightRemainingInches(height))}"`;
-    const weight = pokemon.defaultVariant.weight;
+    const weight = variant.weight;
     const weightInKilos = getWeightInKilograms(weight);
     const weightInPounds = getWeightInPounds(weight);
-    const captureRate = pokemon.capture_rate;
+    const captureRate = species.capture_rate;
     const capturePercent = getCapturePercent(captureRate);
-    const baseStats = pokemon.defaultVariant.stats;
-    const abilities = pokemon.defaultVariant.abilities;
-    const baseExperience = pokemon.defaultVariant.base_experience;
-    const baseFriendship = pokemon.base_happiness;
-    const growthRate = pokemon.growth_rate.name;
-    const genderRate = pokemon.gender_rate;
+    const baseStats = variant.stats;
+    const abilities = variant.abilities;
+    const baseExperience = variant.base_experience;
+    const baseFriendship = species.base_happiness;
+    const growthRate = species.growth_rate.name;
+    const genderRate = species.gender_rate;
     const femalePercent = getFemalePercent(genderRate);
     const malePercent = getMalePercent(femalePercent);
-    const eggGroups = pokemon.egg_groups;
+    const eggGroups = species.egg_groups;
+    let otherVariantsList = [];
+
+    // Add the other variants to the list for display
+    otherVariants.forEach((variant) => {
+      otherVariantsList.push({ species: species, variant: variant });
+    });
+
+    // Displays a list of cards for the other variants, if the pokemon has other variants
+    const displayOtherVariants = (otherVariantsList) => {
+      if (otherVariantsList.length) {
+        return (
+          <ModalRow>
+            <ModalInfoItem label="Other variants">
+              <ModalColumn>
+                <CardList
+                  pokemonList={otherVariantsList}
+                  modal={true}
+                  showNumber={false}
+                />
+              </ModalColumn>
+            </ModalInfoItem>
+          </ModalRow>
+        );
+      }
+    };
 
     // Get the weak, resistant and immune types
     let weakTypes = {};
@@ -271,11 +330,13 @@ class Modal extends Component {
         <section className="modal-main" onClick={this.innerModalClick}>
           <ModalExitBtn hideModal={hideModal} />
           <ModalImagePanel
-            pokemon={pokemon}
+            species={species}
+            variant={variant}
+            showNumber={true}
             getNumberWithLeadingZeros={getNumberWithLeadingZeros}
           />
           <div className="modal-info-panel">
-            <PokemonDescription pokemon={pokemon} />
+            <PokemonDescription species={species} />
             <ModalRow id="modal-top-row">
               <ModalRow>
                 <ModalInfoItem
@@ -340,7 +401,7 @@ class Modal extends Component {
             </ModalRow>
             <ModalRow id="modal-centre-section">
               <ModalColumn>
-              <ModalRow id="modal-base-stats">
+                <ModalRow id="modal-base-stats">
                   <ModalInfoItem label="Base stats">
                     <PokemonStatTable stats={baseStats}></PokemonStatTable>
                   </ModalInfoItem>
@@ -491,6 +552,7 @@ class Modal extends Component {
                 </ModalRow>
               </ModalColumn>
             </ModalRow>
+            {displayOtherVariants(otherVariantsList)}
           </div>
         </section>
       </div>

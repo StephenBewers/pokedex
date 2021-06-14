@@ -40,4 +40,8 @@ $text-stroke: 0 0 3px black;
     font-size: calc(30px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
     text-transform: capitalize;
   }
+
+  .hidden {
+    display: none;
+  }
 }

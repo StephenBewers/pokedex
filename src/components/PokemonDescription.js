@@ -1,7 +1,7 @@
 import React from "react";
 import "./PokemonDescription.scss";
 
-const PokemonDescription = ({ pokemon }) => {
+const PokemonDescription = ({ species }) => {
   // Gets the Omega-Ruby description in English
   const getDescriptionText = (descriptionsArray) => {
     let descriptionString = "";
@@ -16,7 +16,7 @@ const PokemonDescription = ({ pokemon }) => {
     return descriptionString;
   };
 
-  const description = getDescriptionText(pokemon.flavor_text_entries);
+  const description = getDescriptionText(species.flavor_text_entries);
 
   return <p id="pokemon-description">{description}</p>;
 };

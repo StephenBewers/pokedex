@@ -78,17 +78,18 @@ class App extends Component {
           // Get the pokemon species from the API
           let pokemonSpecies = await PokeApi.resource(`${item.url}`);
 
-          // Get the data for the default variant of the species and store it in the object
+          // Get the data for the default variant of the species
+          let pokemonVariant;
           for (let i = 0; i < pokemonSpecies.varieties.length; i++) {
             if (pokemonSpecies.varieties[i].is_default) {
-              pokemonSpecies.defaultVariant = await PokeApi.resource(
+              pokemonVariant = await PokeApi.resource(
                 `${pokemonSpecies.varieties[i].pokemon.url}`
               );
             }
           }
 
-          // Add the pokemon object to the array of pokemon objects retrieved in this request
-          pokemonObjects.push(pokemonSpecies);
+          // Add the pokemon object and default variant to the array of pokemon objects retrieved in this request
+          pokemonObjects.push({species:pokemonSpecies, variant:pokemonVariant});
         }
 
         // If there are fewer pokemon in state than would be returned by one call, replace the state with
@@ -119,13 +120,18 @@ class App extends Component {
           // Get the pokemon species from the API
           let pokemonSpecies = await PokeApi.getPokemonSpeciesByName(pokemon);
 
-          // Get the data for the default variant of the species and store it in the object
-          pokemonSpecies.defaultVariant = await PokeApi.resource(
-            `${pokemonSpecies.varieties[0].pokemon.url}`
-          );
+          // Get the data for the default variant of the species
+          let pokemonVariant;
+          for (let i = 0; i < pokemonSpecies.varieties.length; i++) {
+            if (pokemonSpecies.varieties[i].is_default) {
+              pokemonVariant = await PokeApi.resource(
+                `${pokemonSpecies.varieties[i].pokemon.url}`
+              );
+            }
+          }
 
-          // Add the pokemon object to the array of pokemon objects retrieved in this request
-          pokemonObjects.push(pokemonSpecies);
+          // Add the pokemon object and default variant to the array of pokemon objects retrieved in this request
+          pokemonObjects.push([pokemonSpecies, pokemonVariant]);
         }
 
         // Change state to the pokemon objects retrieved
@@ -235,7 +241,7 @@ class App extends Component {
               </div>
             }
           >
-            <CardList pokemonList={retrievedPokemon} />
+            <CardList pokemonList={retrievedPokemon} showNumber={true} />
           </InfiniteScroll>
         </main>
       </>
