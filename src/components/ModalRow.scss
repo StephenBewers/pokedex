@@ -1,11 +1,12 @@
 $border-style: 1px solid #ddd;
+$thick-border-style: 3px solid #ddd;
 $padding-constant: 1.4vmax;
-$double-padding-constant: 2vmax;
+$thick-padding-constant: 2vmax;
 
 .modal-row {
   display: flex;
   flex-flow: row wrap;
-  padding: $padding-constant 0vmax;
+  padding: $thick-padding-constant 0vmax;
 
   @media (max-width: 720px) {
     flex-flow: column nowrap;
@@ -22,13 +23,13 @@ $double-padding-constant: 2vmax;
 
 .modal-column > .modal-row {
   @media (min-width: 720px) {
-    padding: $double-padding-constant 0vmax;
+    padding: $thick-padding-constant 0vmax;
   }
 }
 
 .modal-column .modal-row:first-child {
   @media (min-width: 720px) {
-    padding: 0vmax 0vmax $double-padding-constant 0vmax;
+    padding: 0vmax 0vmax $thick-padding-constant 0vmax;
   }
 }
 
@@ -41,12 +42,19 @@ $double-padding-constant: 2vmax;
 }
 
 #modal-centre-section {
-  border-top: $border-style;
-  border-bottom: $border-style;
-  padding-top: $double-padding-constant;
-  @media (max-width: 720px) {
-    padding: 0;
-  }
+  padding: 0px;
+
+  /* This uses the background color to create a smart divider
+     between columns which then divides between rows on wrap */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  background-color: #ddd;
+  grid-column-gap: 2.3vmax;
+  grid-row-gap: 5px;
+
+  // Thick border style as children will cover some of it
+  border-top: $thick-border-style;
+  border-bottom: $thick-border-style;
 }
 
 #modal-training, #modal-breeding, #modal-abilities {

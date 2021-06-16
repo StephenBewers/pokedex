@@ -18,11 +18,7 @@ $text-stroke: 0 0 3px black;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  min-width: 300px;
-  @media (min-width: 1000px) {
-    height: 100%;
-    overflow: hidden;
-  }
+  min-width: auto;
 
   img {
     z-index: $img-panel-z-index;

@@ -24,12 +24,12 @@
   .modal-card-list {
     display: grid;
     padding: 3vh 0vw;
-    gap: 3.3vmax;
+    gap: 33px;
     justify-content: start;
 
     @media (orientation: landscape) and (min-height: 600px) {
-      grid-template-columns: repeat(auto-fit, minmax(140px, calc(26vmin / 1.4)));
-      grid-auto-rows: minmax(196px, 26vmin);
+      grid-template-columns: repeat(auto-fit, minmax(140px, calc(22vmin / 1.4)));
+      grid-auto-rows: minmax(196px, 22vmin);
     }
 
     @media (orientation: landscape) and (max-height: 600px) {
@@ -38,7 +38,7 @@
     }
     
     @media (orientation: portrait) {
-      grid-template-columns: repeat(auto-fill, minmax(126px, 26vmin));
-      grid-auto-rows: minmax(176px, calc(26vmin * 1.4));
+      grid-template-columns: repeat(auto-fill, minmax(126px, 22vmin));
+      grid-auto-rows: minmax(176px, calc(22vmin * 1.4));
     }
   }

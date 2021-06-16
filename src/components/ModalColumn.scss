@@ -6,12 +6,17 @@
   flex: 1 1 0;
 }
 
-#modal-right-column {
-  @media (min-width: 720px) {
-    padding-left: 3vmax;
-    border-left: ModalRow.$border-style;
-  }
-  @media (max-width: 720px) {
-    border-top: ModalRow.$border-style;
-  }
+#modal-centre-section > .modal-column {
+  padding-top: ModalRow.$thick-padding-constant;
+  background-color: #fff;
+
+  /* Move the columns slightly outside of the bounding box to hide 
+     the grey background which provides the dividing line */
+  margin: -2px;
+  padding: 2px;
+}
+
+#modal-centre-section > *:last-child {
+  // Removes the left margin from the final column when wrapped
+  margin-left: -2.1vmax;
 }

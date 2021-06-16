@@ -50,8 +50,7 @@
   }
 }
 
-#modal-abilities .modal-info-item {
-  @media (max-width: 1200px) {
-    padding-bottom: 1vmax;
-  }
+#modal-type-effectiveness {
+  // This gives margin to the first column when unwrapped
+  margin-left: 2vmax;
 }

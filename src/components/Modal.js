@@ -482,7 +482,7 @@ class Modal extends Component {
                   </ModalInfoItem>
                 </ModalRow>
               </ModalColumn>
-              <ModalColumn id="modal-right-column">
+              <ModalColumn>
                 <ModalRow>
                   <ModalInfoItem
                     label="Type effectiveness"
