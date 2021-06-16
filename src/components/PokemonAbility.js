@@ -1,7 +1,7 @@
 import React from "react";
 import "./PokemonAbility.scss";
 
-const PokemonAbility = ({ ability, detailsReceived }) => {
+const PokemonAbility = ({ ability, detailsReceived, textCleanup }) => {
   // If the description of the ability has been received, return it
   const getAbilityDescription = (ability, detailsReceived) => {
     if (detailsReceived) {
@@ -33,7 +33,7 @@ const PokemonAbility = ({ ability, detailsReceived }) => {
   return (
     <details className={`pokemon-ability`}>
       <summary>
-        {ability.ability.name}
+        {textCleanup(ability.ability.name)}
         {isHidden(ability)}
       </summary>
       <p className={`pokemon-ability-description`}>

@@ -20,39 +20,43 @@ const customOptions = {
 const PokeApi = new Pokedex.Pokedex(customOptions);
 const defaultTypeEffectiveness = 1;
 class Modal extends Component {
+  constructor(props) {
+    super(props);
+    this.textCleanup = this.textCleanup.bind(this);
+    this.state = {
+      species: this.props.species,
+      variant: this.props.variant,
+      abilitiesReceived: false,
+      typesReceived: false,
+      otherVariants: [],
+      typeEffectiveness: {
+        bug: defaultTypeEffectiveness,
+        dark: defaultTypeEffectiveness,
+        dragon: defaultTypeEffectiveness,
+        electric: defaultTypeEffectiveness,
+        fairy: defaultTypeEffectiveness,
+        fighting: defaultTypeEffectiveness,
+        fire: defaultTypeEffectiveness,
+        flying: defaultTypeEffectiveness,
+        ghost: defaultTypeEffectiveness,
+        grass: defaultTypeEffectiveness,
+        ground: defaultTypeEffectiveness,
+        ice: defaultTypeEffectiveness,
+        normal: defaultTypeEffectiveness,
+        poison: defaultTypeEffectiveness,
+        psychic: defaultTypeEffectiveness,
+        rock: defaultTypeEffectiveness,
+        steel: defaultTypeEffectiveness,
+        water: defaultTypeEffectiveness,
+      },
+    };
+  }
   static propTypes = {
     displayModal: PropTypes.bool,
     species: PropTypes.object.isRequired,
     variant: PropTypes.object.isRequired,
     hideModal: PropTypes.func,
     getNumberWithLeadingZeros: PropTypes.func,
-  };
-  state = {
-    species: this.props.species,
-    variant: this.props.variant,
-    abilitiesReceived: false,
-    typesReceived: false,
-    otherVariants: [],
-    typeEffectiveness: {
-      bug: defaultTypeEffectiveness,
-      dark: defaultTypeEffectiveness,
-      dragon: defaultTypeEffectiveness,
-      electric: defaultTypeEffectiveness,
-      fairy: defaultTypeEffectiveness,
-      fighting: defaultTypeEffectiveness,
-      fire: defaultTypeEffectiveness,
-      flying: defaultTypeEffectiveness,
-      ghost: defaultTypeEffectiveness,
-      grass: defaultTypeEffectiveness,
-      ground: defaultTypeEffectiveness,
-      ice: defaultTypeEffectiveness,
-      normal: defaultTypeEffectiveness,
-      poison: defaultTypeEffectiveness,
-      psychic: defaultTypeEffectiveness,
-      rock: defaultTypeEffectiveness,
-      steel: defaultTypeEffectiveness,
-      water: defaultTypeEffectiveness,
-    },
   };
 
   // Prevents clicks on the inner modal div triggering the outer modal click event
@@ -64,6 +68,11 @@ class Modal extends Component {
     this.getPokemonAbilityObjects(this.state.variant);
     this.getPokemonTypeObjects(this.state.variant);
     this.getOtherVariants(this.state.species, this.state.variant);
+  }
+
+  // Clean up the text from the API (removes hyphens)
+  textCleanup = (text) => {
+    return text.toString().replace(/-/g, ' ');
   }
 
   // Gets the pokemon ability objects from the API
@@ -280,26 +289,26 @@ class Modal extends Component {
     const eggGroups = species.egg_groups;
     let otherVariantsList = [];
 
-    // Add the other variants to the list for display
-    otherVariants.forEach((variant) => {
-      otherVariantsList.push({ species: species, variant: variant });
-    });
-
-    // Displays a list of cards for the other variants, if the pokemon has other variants
-    const displayOtherVariants = (otherVariantsList) => {
-      if (otherVariantsList.length) {
+    // Gets the gender rates for rendering
+    const getGenderSplit = (genderRate) => {
+      if (genderRate === -1) {
         return (
-          <ModalRow>
-            <ModalInfoItem label="Other variants">
-              <ModalColumn>
-                <CardList
-                  pokemonList={otherVariantsList}
-                  modal={true}
-                  showNumber={false}
-                />
-              </ModalColumn>
-            </ModalInfoItem>
-          </ModalRow>
+          <ModalInfoValue
+              value={`No gender`}
+            ></ModalInfoValue>
+        )
+      } else {
+        return (
+          <>
+            <ModalInfoValue
+              value={`\u2640 ${femalePercent}`}
+              unit="%"
+            ></ModalInfoValue>
+            <ModalInfoValue
+              value={`\u2642 ${malePercent}`}
+              unit="%"
+            ></ModalInfoValue>
+          </>
         );
       }
     };
@@ -324,6 +333,30 @@ class Modal extends Component {
         ([key, value]) => value === 0
       ); // Get the types where the effectiveness is 0
     }
+
+    // Add the other variants to the list for display
+    otherVariants.forEach((variant) => {
+      otherVariantsList.push({ species: species, variant: variant });
+    });
+
+    // Displays a list of cards for the other variants, if the pokemon has other variants
+    const displayOtherVariants = (otherVariantsList) => {
+      if (otherVariantsList.length) {
+        return (
+          <ModalRow>
+            <ModalInfoItem label="Other variants">
+              <ModalColumn>
+                <CardList
+                  pokemonList={otherVariantsList}
+                  modal={true}
+                  showNumber={false}
+                />
+              </ModalColumn>
+            </ModalInfoItem>
+          </ModalRow>
+        );
+      }
+    };
 
     return (
       <div className={`modal ${visibleClassName}`} onClick={hideModal}>
@@ -359,7 +392,7 @@ class Modal extends Component {
                   id="modal-habitat"
                   subitem={true}
                 >
-                  <ModalInfoValue value={habitat}></ModalInfoValue>
+                  <ModalInfoValue value={this.textCleanup(habitat)}></ModalInfoValue>
                 </ModalInfoItem>
               </ModalRow>
               <ModalRow>
@@ -403,7 +436,7 @@ class Modal extends Component {
               <ModalColumn>
                 <ModalRow id="modal-base-stats">
                   <ModalInfoItem label="Base stats">
-                    <PokemonStatTable stats={baseStats}></PokemonStatTable>
+                    <PokemonStatTable stats={baseStats} textCleanup={this.textCleanup}></PokemonStatTable>
                   </ModalInfoItem>
                 </ModalRow>
                 <ModalRow id="modal-abilities">
@@ -413,6 +446,7 @@ class Modal extends Component {
                         <PokemonAbility
                           ability={ability}
                           detailsReceived={abilitiesReceived}
+                          textCleanup={this.textCleanup}
                           key={`ability-${i}`}
                         ></PokemonAbility>
                       );
@@ -441,7 +475,7 @@ class Modal extends Component {
                         id="modal-growth-rate"
                         subitem={true}
                       >
-                        <ModalInfoValue value={growthRate}></ModalInfoValue>
+                        <ModalInfoValue value={this.textCleanup(growthRate)}></ModalInfoValue>
                       </ModalInfoItem>
                     </ModalRow>
                   </ModalInfoItem>
@@ -455,14 +489,7 @@ class Modal extends Component {
                         subitem={true}
                         row={true}
                       >
-                        <ModalInfoValue
-                          value={`\u2640 ${femalePercent}`}
-                          unit="%"
-                        ></ModalInfoValue>
-                        <ModalInfoValue
-                          value={`\u2642 ${malePercent}`}
-                          unit="%"
-                        ></ModalInfoValue>
+                        {getGenderSplit(genderRate)}
                       </ModalInfoItem>
                       <ModalInfoItem
                         label="Egg groups"
@@ -472,7 +499,7 @@ class Modal extends Component {
                         {eggGroups.map((eggGroup, i) => {
                           return (
                             <ModalInfoValue
-                              value={eggGroup.name}
+                              value={this.textCleanup(eggGroup.name)}
                               key={eggGroup.name}
                             ></ModalInfoValue>
                           );

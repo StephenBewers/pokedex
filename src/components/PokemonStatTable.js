@@ -1,7 +1,7 @@
 import React from "react";
 import "./PokemonStatTable.scss";
 
-const PokemonStatTable = ({ stats }) => {
+const PokemonStatTable = ({ stats, textCleanup }) => {
 
     // Gets the sum of all the base stat values
     const getTotalStatsValue = (stats) => {
@@ -29,7 +29,7 @@ const PokemonStatTable = ({ stats }) => {
         {stats.map((stat, i) => {
           return (
             <tr key={`stat-${i}`}>
-              <td className={`stat-name ${stat.stat.name}`}>{stat.stat.name}</td>
+              <td className={`stat-name ${stat.stat.name}`}>{textCleanup(stat.stat.name)}</td>
               <td className="stat-value">
                 {stat.base_stat}
                 <span

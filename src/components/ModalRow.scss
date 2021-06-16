@@ -29,7 +29,7 @@ $thick-padding-constant: 2vmax;
 
 .modal-column .modal-row:first-child {
   @media (min-width: 720px) {
-    padding: 0vmax 0vmax $thick-padding-constant 0vmax;
+    padding: $thick-padding-constant 0vmax;
   }
 }
 
