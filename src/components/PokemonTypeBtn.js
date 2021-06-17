@@ -66,7 +66,7 @@ const PokemonTypeBtn = ({ type, effectiveness }) => {
   }
 
   return (
-    <span className={`${getTypeBtnClass(effectiveness)} ${type}-btn`}>
+    <span className={`${getTypeBtnClass(effectiveness)} ${type}`}>
       {renderTypeIcon(typeIcon)} {type}
       {renderTypeEffectiveness(effectiveness)}
     </span>

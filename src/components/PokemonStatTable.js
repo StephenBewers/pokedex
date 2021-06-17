@@ -1,7 +1,7 @@
 import React from "react";
 import "./PokemonStatTable.scss";
 
-const PokemonStatTable = ({ stats, textCleanup }) => {
+const PokemonStatTable = ({ stats, types, textCleanup }) => {
 
     // Gets the sum of all the base stat values
     const getTotalStatsValue = (stats) => {
@@ -11,6 +11,12 @@ const PokemonStatTable = ({ stats, textCleanup }) => {
         });
         return totalStatsValue;
     }
+
+    const totalStatsValue = getTotalStatsValue(stats);
+
+    // Get the types
+    const type1 = types[0].type.name;
+    const type2 = (types.length > 1) ? types[1].type.name : type1;
 
   return (
     <table className="pokemon-stat-table">
@@ -27,24 +33,29 @@ const PokemonStatTable = ({ stats, textCleanup }) => {
       </thead>
       <tbody>
         {stats.map((stat, i) => {
+          if (stat.stat.name.includes("special")) {
+            stat.stat.name = stat.stat.name.replace("special", "Sp.")
+          }
           return (
             <tr key={`stat-${i}`}>
               <td className={`stat-name ${stat.stat.name}`}>{textCleanup(stat.stat.name)}</td>
               <td className="stat-value">
+                <div>
                 {stat.base_stat}
                 <span
                   className="stat-bar-outer"
                   style={{
-                    paddingRight: (155 - stat.base_stat) + "px",
+                    paddingRight: (150 - ((stat.base_stat / 255) * 150)) + "px",
                   }}
                 >
                   <span
-                    className="stat-bar-inner"
+                    className={`stat-bar-inner ${type1}`}
                     style={{
-                      paddingRight: stat.base_stat+ "px",
+                      paddingRight: ((stat.base_stat / 255) * 150)+ "px",
                     }}
                   ></span>
                 </span>
+                </div>
               </td>
             </tr>
           );
@@ -52,8 +63,19 @@ const PokemonStatTable = ({ stats, textCleanup }) => {
     </tbody>
       <tfoot>
         <tr>
-          <td>Total</td>
-          <td>{getTotalStatsValue(stats)}</td>
+          <td className="stat-name total">Total</td>
+          <td className="stat-value total"><div>{totalStatsValue}<span
+                  className="stat-bar-outer total"
+                  style={{
+                    paddingRight: (150 - (((totalStatsValue / 6) / 255) * 150)) + "px",
+                  }}
+                >
+                  <span
+                    className={`stat-bar-inner total ${type2}`}
+                    style={{
+                      paddingRight: (((totalStatsValue / 6) / 255) * 150)+ "px",
+                    }}
+                  ></span></span></div></td>
         </tr>
       </tfoot>
     </table>

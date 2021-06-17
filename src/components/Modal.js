@@ -72,8 +72,10 @@ class Modal extends Component {
 
   // Clean up the text from the API (removes hyphens)
   textCleanup = (text) => {
-    return text.toString().replace(/-/g, ' ');
-  }
+    if (text) {
+      return text.toString().replace(/-/g, " ");
+    }
+  };
 
   // Gets the pokemon ability objects from the API
   getPokemonAbilityObjects = (variant) => {
@@ -292,11 +294,7 @@ class Modal extends Component {
     // Gets the gender rates for rendering
     const getGenderSplit = (genderRate) => {
       if (genderRate === -1) {
-        return (
-          <ModalInfoValue
-              value={`No gender`}
-            ></ModalInfoValue>
-        )
+        return <ModalInfoValue value={`No gender`}></ModalInfoValue>;
       } else {
         return (
           <>
@@ -392,7 +390,9 @@ class Modal extends Component {
                   id="modal-habitat"
                   subitem={true}
                 >
-                  <ModalInfoValue value={this.textCleanup(habitat)}></ModalInfoValue>
+                  <ModalInfoValue
+                    value={this.textCleanup(habitat)}
+                  ></ModalInfoValue>
                 </ModalInfoItem>
               </ModalRow>
               <ModalRow>
@@ -436,7 +436,11 @@ class Modal extends Component {
               <ModalColumn>
                 <ModalRow id="modal-base-stats">
                   <ModalInfoItem label="Base stats">
-                    <PokemonStatTable stats={baseStats} textCleanup={this.textCleanup}></PokemonStatTable>
+                    <PokemonStatTable
+                      stats={baseStats}
+                      types={types}
+                      textCleanup={this.textCleanup}
+                    ></PokemonStatTable>
                   </ModalInfoItem>
                 </ModalRow>
                 <ModalRow id="modal-abilities">
@@ -475,7 +479,9 @@ class Modal extends Component {
                         id="modal-growth-rate"
                         subitem={true}
                       >
-                        <ModalInfoValue value={this.textCleanup(growthRate)}></ModalInfoValue>
+                        <ModalInfoValue
+                          value={this.textCleanup(growthRate)}
+                        ></ModalInfoValue>
                       </ModalInfoItem>
                     </ModalRow>
                   </ModalInfoItem>

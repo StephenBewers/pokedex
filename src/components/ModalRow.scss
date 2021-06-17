@@ -47,7 +47,7 @@ $thick-padding-constant: 2vmax;
   /* This uses the background color to create a smart divider
      between columns which then divides between rows on wrap */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   background-color: #ddd;
   grid-column-gap: 2.3vmax;
   grid-row-gap: 5px;

@@ -8,7 +8,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 
-@mixin type-background($color, $image) {
+@mixin card-type-background($color, $image) {
   background: linear-gradient(rgba($color, 0.8), rgba($color, 0.8)), $image,
     $color;
   background-repeat: space;
@@ -49,96 +49,152 @@ $rock-color: #544c4b;
 $steel-color: #8D98A0;
 $water-color: #04719F;
 
-// Pokemon type backgrounds
+// Pokemon type classes
+.bug {
+  background-color: $bug-color;
+}
+.dark {
+  background-color: $dark-color;
+}
+.dragon {
+  background-color: $dragon-color;
+}
+.electric {
+  background-color: $electric-color;
+}
+.fairy {
+  background-color: $fairy-color;
+}
+.fighting {
+  background-color: $fighting-color;
+}
+.fire {
+  background-color: $fire-color;
+}
+.flying {
+  background-color: $flying-color;
+}
+.ghost {
+  background-color: $ghost-color;
+}
+.grass {
+  background-color: $grass-color;
+}
+.ground {
+  background-color: $ground-color;
+}
+.ice {
+  background-color: $ice-color;
+}
+.normal {
+  background-color: $normal-color;
+}
+.poison {
+  background-color: $poison-color;
+}
+.psychic {
+  background-color: $psychic-color;
+}
+.rock {
+  background-color: $rock-color;
+}
+.steel {
+  background-color: $steel-color;
+}
+.water {
+  background-color: $water-color;
+}
+
+// Pokemon card type backgrounds
 .bug-type {
-  @include type-background($bug-color, url("../assets/images/bug-icon.png"));
+  @include card-type-background($bug-color, url("../assets/images/bug-icon.png"));
 }
 .dark-type {
-  @include type-background($dark-color, url("../assets/images/dark-icon.png"));
+  @include card-type-background($dark-color, url("../assets/images/dark-icon.png"));
 }
 .dragon-type {
-  @include type-background(
+  @include card-type-background(
     $dragon-color,
     url("../assets/images/dragon-icon.png")
   );
 }
 .electric-type {
-  @include type-background(
+  @include card-type-background(
     $electric-color,
     url("../assets/images/electric-icon.png")
   );
 }
 .fairy-type {
-  @include type-background(
+  @include card-type-background(
     $fairy-color,
     url("../assets/images/fairy-icon.png")
   );
 }
 .fighting-type {
-  @include type-background(
+  @include card-type-background(
     $fighting-color,
     url("../assets/images/fighting-icon.png")
   );
 }
 .fire-type {
-  @include type-background($fire-color, url("../assets/images/fire-icon.png"));
+  @include card-type-background($fire-color, url("../assets/images/fire-icon.png"));
 }
 .flying-type {
-  @include type-background(
+  @include card-type-background(
     $flying-color,
     url("../assets/images/flying-icon.png")
   );
 }
 .ghost-type {
-  @include type-background(
+  @include card-type-background(
     $ghost-color,
     url("../assets/images/ghost-icon.png")
   );
 }
 .grass-type {
-  @include type-background(
+  @include card-type-background(
     $grass-color,
     url("../assets/images/grass-icon.png")
   );
 }
 .ground-type {
-  @include type-background(
+  @include card-type-background(
     $ground-color,
     url("../assets/images/ground-icon.png")
   );
 }
 .ice-type {
-  @include type-background($ice-color, url("../assets/images/ice-icon.png"));
+  @include card-type-background($ice-color, url("../assets/images/ice-icon.png"));
 }
 .normal-type {
-  @include type-background(
+  @include card-type-background(
     $normal-color,
     url("../assets/images/normal-icon.png")
   );
 }
 .poison-type {
-  @include type-background(
+  @include card-type-background(
     $poison-color,
     url("../assets/images/poison-icon.png")
   );
 }
 .psychic-type {
-  @include type-background(
+  @include card-type-background(
     $psychic-color,
     url("../assets/images/psychic-icon.png")
   );
 }
 .rock-type {
-  @include type-background($rock-color, url("../assets/images/rock-icon.png"));
+  @include card-type-background($rock-color, url("../assets/images/rock-icon.png"));
 }
 .steel-type {
-  @include type-background(
+  @include card-type-background(
     $steel-color,
     url("../assets/images/steel-icon.png")
   );
 }
 .water-type {
-  @include type-background(
+  @include card-type-background(
     $water-color,
     url("../assets/images/water-icon.png")
   );

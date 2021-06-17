@@ -1,4 +1,4 @@
-@use './ModalInfoItem.scss';
+@use '../containers/App';
 
 .pokemon-stat-table caption {
     margin-block-start: 1em;
@@ -7,7 +7,7 @@
 }
 
 th, td {
-    padding: 0.25em 1.75em 0.25em 0em;
+    padding: 0.25em 1.1em 0.25em 0em;
 }
 
 th.modal-info-sublabel {
@@ -17,16 +17,23 @@ th.modal-info-sublabel {
 
 td.stat-name {
     text-transform: capitalize;
+    min-width: 80px;
+    font-size: 0.9em;
+    
+    &.total {
+        font-size: 1em;
+    }
 }
 
 td.hp {
     text-transform: uppercase;
 }
 
-td.stat-value {
+td.stat-value > div {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
+    max-width: 210px;
 }
 
 tfoot td {
@@ -35,12 +42,15 @@ tfoot td {
 }
 
 .stat-bar-outer {
-    margin-left: 2em;
+    margin-left: 1em;
 }
 
 .stat-bar-inner {
     display: inline-block;
     height: 0.5em;
     border-radius: 12px;
-    background-color: #5252FF;
+    opacity: 0.7;
+    &.total {
+        opacity: 1;
+    }
 }
