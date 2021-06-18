@@ -12,51 +12,65 @@ import PokemonTypeBtn from "./PokemonTypeBtn";
 import PokemonAbility from "./PokemonAbility";
 import PokemonStatTable from "./PokemonStatTable";
 import CardList from "./CardList";
+import { textCleanup } from "../helpers.js";
 
+// Constants for the Poke API
 const Pokedex = require("pokeapi-js-wrapper");
 const customOptions = {
   cacheImages: true,
 };
 const PokeApi = new Pokedex.Pokedex(customOptions);
-const defaultTypeEffectiveness = 1;
+
+// Default type effectiveness
+const defaultTypeEffectivenessValue = 1;
+const getDefaultTypeEffectiveness = () => {
+  return {
+    bug: defaultTypeEffectivenessValue,
+    dark: defaultTypeEffectivenessValue,
+    dragon: defaultTypeEffectivenessValue,
+    electric: defaultTypeEffectivenessValue,
+    fairy: defaultTypeEffectivenessValue,
+    fighting: defaultTypeEffectivenessValue,
+    fire: defaultTypeEffectivenessValue,
+    flying: defaultTypeEffectivenessValue,
+    ghost: defaultTypeEffectivenessValue,
+    grass: defaultTypeEffectivenessValue,
+    ground: defaultTypeEffectivenessValue,
+    ice: defaultTypeEffectivenessValue,
+    normal: defaultTypeEffectivenessValue,
+    poison: defaultTypeEffectivenessValue,
+    psychic: defaultTypeEffectivenessValue,
+    rock: defaultTypeEffectivenessValue,
+    steel: defaultTypeEffectivenessValue,
+    water: defaultTypeEffectivenessValue,
+  };
+};
+
+// Resets the state of the modal to the default values
+const resetState = () => ({
+  abilitiesReceived: false,
+  typesReceived: false,
+  otherVariants: [],
+  typeEffectiveness: getDefaultTypeEffectiveness(),
+});
+
 class Modal extends Component {
   constructor(props) {
     super(props);
-    this.textCleanup = this.textCleanup.bind(this);
+    this.infoPanelRef = React.createRef();
+    this.modalMainRef = React.createRef();
+    this.refreshModal = this.refreshModal.bind(this);
     this.state = {
+      ...resetState(),
       species: this.props.species,
       variant: this.props.variant,
-      abilitiesReceived: false,
-      typesReceived: false,
-      otherVariants: [],
-      typeEffectiveness: {
-        bug: defaultTypeEffectiveness,
-        dark: defaultTypeEffectiveness,
-        dragon: defaultTypeEffectiveness,
-        electric: defaultTypeEffectiveness,
-        fairy: defaultTypeEffectiveness,
-        fighting: defaultTypeEffectiveness,
-        fire: defaultTypeEffectiveness,
-        flying: defaultTypeEffectiveness,
-        ghost: defaultTypeEffectiveness,
-        grass: defaultTypeEffectiveness,
-        ground: defaultTypeEffectiveness,
-        ice: defaultTypeEffectiveness,
-        normal: defaultTypeEffectiveness,
-        poison: defaultTypeEffectiveness,
-        psychic: defaultTypeEffectiveness,
-        rock: defaultTypeEffectiveness,
-        steel: defaultTypeEffectiveness,
-        water: defaultTypeEffectiveness,
-      },
     };
   }
   static propTypes = {
-    displayModal: PropTypes.bool,
+    showModal: PropTypes.bool,
     species: PropTypes.object.isRequired,
     variant: PropTypes.object.isRequired,
     hideModal: PropTypes.func,
-    getNumberWithLeadingZeros: PropTypes.func,
   };
 
   // Prevents clicks on the inner modal div triggering the outer modal click event
@@ -65,17 +79,11 @@ class Modal extends Component {
   }
 
   componentDidMount() {
+    // Fetch the details about abilities, types and other variants from the API
     this.getPokemonAbilityObjects(this.state.variant);
     this.getPokemonTypeObjects(this.state.variant);
     this.getOtherVariants(this.state.species, this.state.variant);
   }
-
-  // Clean up the text from the API (removes hyphens)
-  textCleanup = (text) => {
-    if (text) {
-      return text.toString().replace(/-/g, " ");
-    }
-  };
 
   // Gets the pokemon ability objects from the API
   getPokemonAbilityObjects = (variant) => {
@@ -100,7 +108,9 @@ class Modal extends Component {
   };
 
   // Calculates the effectiveness of each type against this pokemon
-  calculateTypeEffectiveness = (type, typeEffectiveness) => {
+  calculateTypeEffectiveness = (type) => {
+    let typeEffectiveness = getDefaultTypeEffectiveness();
+
     // Calculate double damage types
     if (type.damage_relations.double_damage_from.length) {
       type.damage_relations.double_damage_from.forEach((doubleType) => {
@@ -124,13 +134,12 @@ class Modal extends Component {
           typeEffectiveness[immuneType.name] * 0;
       });
     }
-
     return typeEffectiveness;
   };
 
   // Gets the pokemon type objects from the API
   getPokemonTypeObjects = (variant) => {
-    let { typeEffectiveness } = this.state;
+    let typeEffectiveness;
     if (variant.types.length) {
       try {
         (async () => {
@@ -139,10 +148,7 @@ class Modal extends Component {
               `${variant.types[i].type.url}`
             );
             variant.types[i].details = typeObject;
-            typeEffectiveness = this.calculateTypeEffectiveness(
-              typeObject,
-              typeEffectiveness
-            );
+            typeEffectiveness = this.calculateTypeEffectiveness(typeObject);
           }
           this.setState({
             variant: variant,
@@ -181,8 +187,32 @@ class Modal extends Component {
     }
   };
 
+  // Scrolls the referred element to the top
+  scrollToTop = (ref) => ref.current.scroll({ top: 0, behavior: "auto" });
+
+  // Refreshes the modal with a different pokemon
+  refreshModal = (pokemon) => {
+    // Scroll the modal elements back to the top
+    this.scrollToTop(this.modalMainRef);
+    this.scrollToTop(this.infoPanelRef);
+    // Set the modal state for the new pokemon
+    this.setState(
+      {
+        ...resetState(),
+        species: pokemon.species,
+        variant: pokemon.variant,
+      },
+      () => {
+        // Once state has changed, fetch the new abilities, types and other variants from the API
+        this.getPokemonAbilityObjects(pokemon.variant);
+        this.getPokemonTypeObjects(pokemon.variant);
+        this.getOtherVariants(pokemon.species, pokemon.variant);
+      }
+    );
+  };
+
   render() {
-    const { displayModal, hideModal, getNumberWithLeadingZeros } = this.props;
+    const { showModal, hideModal, showNumber } = this.props;
 
     const {
       species,
@@ -193,8 +223,8 @@ class Modal extends Component {
       otherVariants,
     } = this.state;
 
-    // If the displayModal state becomes false, hide the modal
-    const visibleClassName = displayModal ? "visible" : "hidden";
+    // If the showModal state becomes false, hide the modal
+    const visibleClassName = showModal ? "visible" : "hidden";
 
     // Gets the pokemon height in metres
     const getHeightInMetres = (height) => {
@@ -228,12 +258,14 @@ class Modal extends Component {
 
     // Get the female gender percentage
     const getFemalePercent = (genderRate) => {
-      return ((genderRate / 8) * 100).toFixed(1);
+      let femalePercent = ((genderRate / 8) * 100);
+      return (femalePercent % 1 === 0) ? femalePercent : femalePercent.toFixed(1);
     };
 
     // Get the male gender percentage
     const getMalePercent = (femalePercent) => {
-      return (100 - femalePercent).toFixed(1);
+      let malePercent = (100 - femalePercent);
+      return (malePercent % 1 === 0) ? malePercent : malePercent.toFixed(1);
     };
 
     // If the type details have been received, returns the JSX to display the type effectiveness buttons
@@ -348,6 +380,7 @@ class Modal extends Component {
                   pokemonList={otherVariantsList}
                   modal={true}
                   showNumber={false}
+                  clickHandler={this.refreshModal}
                 />
               </ModalColumn>
             </ModalInfoItem>
@@ -358,15 +391,18 @@ class Modal extends Component {
 
     return (
       <div className={`modal ${visibleClassName}`} onClick={hideModal}>
-        <section className="modal-main" onClick={this.innerModalClick}>
+        <section
+          className="modal-main"
+          onClick={this.innerModalClick}
+          ref={this.modalMainRef}
+        >
           <ModalExitBtn hideModal={hideModal} />
           <ModalImagePanel
             species={species}
             variant={variant}
-            showNumber={true}
-            getNumberWithLeadingZeros={getNumberWithLeadingZeros}
+            showNumber={showNumber}
           />
-          <div className="modal-info-panel">
+          <div className="modal-info-panel" ref={this.infoPanelRef}>
             <PokemonDescription species={species} />
             <ModalRow id="modal-top-row">
               <ModalRow>
@@ -390,9 +426,7 @@ class Modal extends Component {
                   id="modal-habitat"
                   subitem={true}
                 >
-                  <ModalInfoValue
-                    value={this.textCleanup(habitat)}
-                  ></ModalInfoValue>
+                  <ModalInfoValue value={textCleanup(habitat)}></ModalInfoValue>
                 </ModalInfoItem>
               </ModalRow>
               <ModalRow>
@@ -439,7 +473,6 @@ class Modal extends Component {
                     <PokemonStatTable
                       stats={baseStats}
                       types={types}
-                      textCleanup={this.textCleanup}
                     ></PokemonStatTable>
                   </ModalInfoItem>
                 </ModalRow>
@@ -450,7 +483,6 @@ class Modal extends Component {
                         <PokemonAbility
                           ability={ability}
                           detailsReceived={abilitiesReceived}
-                          textCleanup={this.textCleanup}
                           key={`ability-${i}`}
                         ></PokemonAbility>
                       );
@@ -480,7 +512,7 @@ class Modal extends Component {
                         subitem={true}
                       >
                         <ModalInfoValue
-                          value={this.textCleanup(growthRate)}
+                          value={textCleanup(growthRate)}
                         ></ModalInfoValue>
                       </ModalInfoItem>
                     </ModalRow>
@@ -505,7 +537,7 @@ class Modal extends Component {
                         {eggGroups.map((eggGroup, i) => {
                           return (
                             <ModalInfoValue
-                              value={this.textCleanup(eggGroup.name)}
+                              value={textCleanup(eggGroup.name)}
                               key={eggGroup.name}
                             ></ModalInfoValue>
                           );

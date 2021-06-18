@@ -1,13 +1,16 @@
 import React from "react";
 import "./ModalImagePanel.scss";
+import { getNumberWithLeadingZeros, textCleanup } from "../helpers.js";
 
-const ModalImagePanel = ({ species, variant, showNumber, getNumberWithLeadingZeros }) => {
+const ModalImagePanel = ({ species, variant, showNumber }) => {
   // Get pokemon information for display on the card
-  const number = species.pokedex_numbers[0].entry_number;
-  const name = variant.name;
+  const number = getNumberWithLeadingZeros(
+    species.pokedex_numbers[0].entry_number,
+    3
+  );
+  const name = textCleanup(variant.name);
   const types = variant.types;
-  const image =
-    variant.sprites.other["official-artwork"].front_default;
+  const image = variant.sprites.other["official-artwork"].front_default;
 
   const primaryTypeClass = `${types[0].type.name}-type`;
 
@@ -22,9 +25,7 @@ const ModalImagePanel = ({ species, variant, showNumber, getNumberWithLeadingZer
     <div
       className={`modal-img-panel ${primaryTypeClass} ${secondaryTypeClass}`}
     >
-      <span className={`${numberClass}`}>
-        {getNumberWithLeadingZeros(number, 3)}
-      </span>
+      <span className={`${numberClass}`}>{number}</span>
       <img src={image} alt={name} />
       <h2 className="pokemon-name">{name}</h2>
     </div>

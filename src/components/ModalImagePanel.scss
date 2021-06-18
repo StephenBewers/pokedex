@@ -1,12 +1,15 @@
+// font-size: calc([minimum font size] + ([maximum font size] - [minimum font size]) * ((100vmin - [minimum viewport width]) / ([maximum viewport width] - [minimum viewport width])));
+$font-size: calc(10px + (120 – 10) * (100vmin – 140px) / (3840 – 140));
 $img-panel-z-index: 5;
 $text-stroke: 0 0 3px black;
 
 @mixin text-style {
-  margin: 3vh;
   z-index: $img-panel-z-index;
 
   font-family: "Pokemon Solid";
   letter-spacing: 4px;
+  line-height: 1.4;
+  text-align: center;
   color: #fff;
   text-shadow: $text-stroke, $text-stroke, $text-stroke, $text-stroke;
 }
@@ -28,12 +31,14 @@ $text-stroke: 0 0 3px black;
 
   .pokemon-number {
     @include text-style;
-    font-size: calc(22px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
+    font-size: $font-size;
+    margin: 4vh 1vw;
   }
 
   .pokemon-name {
     @include text-style;
-    font-size: calc(30px + (6 – 18) * ((100vw – 400px) / (1980 – 400)));
+    font-size: $font-size;
+    margin: 6vh 1vw;
     text-transform: capitalize;
   }
 

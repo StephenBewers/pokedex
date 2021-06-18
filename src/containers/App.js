@@ -3,6 +3,7 @@ import "./App.scss";
 import Header from "../components/Header.js";
 import InfiniteScroll from "react-infinite-scroll-component";
 import CardList from "../components/CardList.js";
+import Modal from "../components/Modal";
 
 const Pokedex = require("pokeapi-js-wrapper");
 const customOptions = {
@@ -14,6 +15,8 @@ class App extends Component {
     super();
     this.resetPokemon = this.resetPokemon.bind(this);
     this.getSpecificPokemon = this.getSpecificPokemon.bind(this);
+    this.initModal = this.initModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
     this.state = {
       pokemonNames: [],
       retrievedPokemon: [],
@@ -21,6 +24,8 @@ class App extends Component {
       count: 1,
       hasMore: true,
       stickySearch: false,
+      showModal: false,
+      modalPokemon: "",
     };
   }
 
@@ -89,7 +94,10 @@ class App extends Component {
           }
 
           // Add the pokemon object and default variant to the array of pokemon objects retrieved in this request
-          pokemonObjects.push({species:pokemonSpecies, variant:pokemonVariant});
+          pokemonObjects.push({
+            species: pokemonSpecies,
+            variant: pokemonVariant,
+          });
         }
 
         // If there are fewer pokemon in state than would be returned by one call, replace the state with
@@ -158,6 +166,34 @@ class App extends Component {
     );
   };
 
+  // Determines if the modal should be rendered or not
+  renderModal = () => {
+    if (this.state.showModal) {
+      return (
+        <Modal
+          showModal={this.state.showModal}
+          hideModal={this.hideModal}
+          species={this.state.modalPokemon.species}
+          variant={this.state.modalPokemon.variant}
+          showNumber={true}
+        />
+      );
+    }
+  };
+
+  // Triggers the modal to show and passes the pokemon information
+  initModal = (pokemon) => {
+    this.setState({
+      showModal: true,
+      modalPokemon: pokemon,
+    });
+  };
+
+  // Hides the modal
+  hideModal = () => {
+    this.setState({ showModal: false });
+  };
+
   componentDidMount() {
     // If the pokemon names list is empty, get the pokemon names
     if (!this.state.pokemonNames.length) {
@@ -205,12 +241,8 @@ class App extends Component {
   }
 
   render() {
-    const {
-      pokemonNames,
-      retrievedPokemon,
-      hasMore,
-      stickySearch,
-    } = this.state;
+    const { pokemonNames, retrievedPokemon, hasMore, stickySearch } =
+      this.state;
     const loadingLabel = retrievedPokemon.length
       ? "Looking for more pokémon"
       : "Looking for pokémon";
@@ -224,6 +256,7 @@ class App extends Component {
           getSpecificPokemon={this.getSpecificPokemon}
         ></Header>
         <main>
+          {this.renderModal()}
           <InfiniteScroll
             dataLength={retrievedPokemon.length}
             next={this.getMorePokemon}
@@ -241,7 +274,11 @@ class App extends Component {
               </div>
             }
           >
-            <CardList pokemonList={retrievedPokemon} showNumber={true} />
+            <CardList
+              pokemonList={retrievedPokemon}
+              showNumber={true}
+              clickHandler={this.initModal}
+            />
           </InfiniteScroll>
         </main>
       </>

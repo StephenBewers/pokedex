@@ -1,7 +1,8 @@
 import React from "react";
 import "./PokemonAbility.scss";
+import { textCleanup } from "../helpers.js";
 
-const PokemonAbility = ({ ability, detailsReceived, textCleanup }) => {
+const PokemonAbility = ({ ability, detailsReceived }) => {
   // If the description of the ability has been received, return it
   const getAbilityDescription = (ability, detailsReceived) => {
     if (detailsReceived) {
@@ -16,7 +17,7 @@ const PokemonAbility = ({ ability, detailsReceived, textCleanup }) => {
     }
     // If the description of the ability hasn't been received, return a holding message
     else {
-      return "Loading ability description..."
+      return "Loading ability description...";
     }
   };
 

@@ -1,22 +1,22 @@
 import React from "react";
 import "./PokemonStatTable.scss";
+import { textCleanup } from "../helpers.js";
 
-const PokemonStatTable = ({ stats, types, textCleanup }) => {
+const PokemonStatTable = ({ stats, types }) => {
+  // Gets the sum of all the base stat values
+  const getTotalStatsValue = (stats) => {
+    let totalStatsValue = 0;
+    stats.forEach((stat) => {
+      totalStatsValue += stat.base_stat;
+    });
+    return totalStatsValue;
+  };
 
-    // Gets the sum of all the base stat values
-    const getTotalStatsValue = (stats) => {
-        let totalStatsValue = 0;
-        stats.forEach(stat => {
-            totalStatsValue += stat.base_stat;
-        });
-        return totalStatsValue;
-    }
+  const totalStatsValue = getTotalStatsValue(stats);
 
-    const totalStatsValue = getTotalStatsValue(stats);
-
-    // Get the types
-    const type1 = types[0].type.name;
-    const type2 = (types.length > 1) ? types[1].type.name : type1;
+  // Get the types
+  const type1 = types[0].type.name;
+  const type2 = types.length > 1 ? types[1].type.name : type1;
 
   return (
     <table className="pokemon-stat-table">
@@ -34,48 +34,56 @@ const PokemonStatTable = ({ stats, types, textCleanup }) => {
       <tbody>
         {stats.map((stat, i) => {
           if (stat.stat.name.includes("special")) {
-            stat.stat.name = stat.stat.name.replace("special", "Sp.")
+            stat.stat.name = stat.stat.name.replace("special", "Sp.");
           }
           return (
             <tr key={`stat-${i}`}>
-              <td className={`stat-name ${stat.stat.name}`}>{textCleanup(stat.stat.name)}</td>
+              <td className={`stat-name ${stat.stat.name}`}>
+                {textCleanup(stat.stat.name)}
+              </td>
               <td className="stat-value">
                 <div>
-                {stat.base_stat}
-                <span
-                  className="stat-bar-outer"
-                  style={{
-                    paddingRight: (150 - ((stat.base_stat / 255) * 150)) + "px",
-                  }}
-                >
+                  {stat.base_stat}
                   <span
-                    className={`stat-bar-inner ${type1}`}
+                    className="stat-bar-outer"
                     style={{
-                      paddingRight: ((stat.base_stat / 255) * 150)+ "px",
+                      paddingRight: 150 - (stat.base_stat / 255) * 150 + "px",
                     }}
-                  ></span>
-                </span>
+                  >
+                    <span
+                      className={`stat-bar-inner ${type1}`}
+                      style={{
+                        paddingRight: (stat.base_stat / 255) * 150 + "px",
+                      }}
+                    ></span>
+                  </span>
                 </div>
               </td>
             </tr>
           );
         })}
-    </tbody>
+      </tbody>
       <tfoot>
         <tr>
           <td className="stat-name total">Total</td>
-          <td className="stat-value total"><div>{totalStatsValue}<span
-                  className="stat-bar-outer total"
+          <td className="stat-value total">
+            <div>
+              {totalStatsValue}
+              <span
+                className="stat-bar-outer total"
+                style={{
+                  paddingRight: 150 - (totalStatsValue / 6 / 255) * 150 + "px",
+                }}
+              >
+                <span
+                  className={`stat-bar-inner total ${type2}`}
                   style={{
-                    paddingRight: (150 - (((totalStatsValue / 6) / 255) * 150)) + "px",
+                    paddingRight: (totalStatsValue / 6 / 255) * 150 + "px",
                   }}
-                >
-                  <span
-                    className={`stat-bar-inner total ${type2}`}
-                    style={{
-                      paddingRight: (((totalStatsValue / 6) / 255) * 150)+ "px",
-                    }}
-                  ></span></span></div></td>
+                ></span>
+              </span>
+            </div>
+          </td>
         </tr>
       </tfoot>
     </table>
